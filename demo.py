@@ -19,9 +19,25 @@ def main():
     parser.add_argument('--img_folder', type=str, default='images', help='Folder with input images')
     parser.add_argument('--out_folder', type=str, default='out_demo', help='Output folder to save rendered results')
     parser.add_argument('--save_mesh', dest='save_mesh', action='store_true', default=False, help='If set, save meshes to disk also')
+    parser.add_argument(
+        '--save_params',
+        dest='save_params',
+        action='store_true',
+        default=False,
+        help='If set, save MANO/camera/joints/vertices as npz'
+    )
+
+    parser.add_argument(
+        '--save_projection',
+        dest='save_projection',
+        action='store_true',
+        default=False,
+        help='If set, save projected 2D joints visualization'
+    )
     parser.add_argument('--rescale_factor', type=float, default=2.0, help='Factor for padding the bbox')
     parser.add_argument('--file_type', nargs='+', default=['*.jpg', '*.png', '*.jpeg'], help='List of file extensions to consider')
     parser.add_argument('--fast',   dest='fast', action='store_true', default=False, help='Use FP16 and layer dropping to accelerate inference')
+
     args = parser.parse_args()
 
     # Download and load checkpoints
@@ -76,7 +92,10 @@ def main():
     
             with torch.no_grad():
                 out = model(batch) 
-                
+            print("Output keys:", out.keys())
+
+            if 'pred_mano_params' in out:
+                print("MANO param keys:", out['pred_mano_params'].keys())
             multiplier    = (2*batch['right']-1)
             pred_cam      = out['pred_cam']
             pred_cam[:,1] = multiplier*pred_cam[:,1]
@@ -101,14 +120,93 @@ def main():
                 joints[:,0] = (2*is_right-1)*joints[:,0]
                 cam_t = pred_cam_t_full[n]
                 kpts_2d = project_full_img(verts, cam_t, scaled_focal_length, img_size[n])
-                
+                joints_2d = project_full_img(
+                    joints,
+                    cam_t,
+                    scaled_focal_length,
+                    img_size[n]
+                )
                 all_verts.append(verts)
                 all_cam_t.append(cam_t)
                 all_right.append(is_right)
                 all_joints.append(joints)
                 all_kpts.append(kpts_2d)
-                
-                
+                if args.save_projection:
+                    projection_img = img_cv2.copy()
+
+                    for j, (x, y) in enumerate(joints_2d):
+                        x = int(x)
+                        y = int(y)
+
+                        if 0 <= x < projection_img.shape[1] and 0 <= y < projection_img.shape[0]:
+                            cv2.circle(
+                                projection_img,
+                                (x, y),
+                                5,
+                                (0, 255, 0),
+                                -1
+                            )
+
+                            cv2.putText(
+                                projection_img,
+                                str(j),
+                                (x + 3, y - 3),
+                                cv2.FONT_HERSHEY_SIMPLEX,
+                                0.35,
+                                (0, 0, 255),
+                                1
+                            )
+
+                    cv2.imwrite(
+                        os.path.join(
+                            args.out_folder,
+                            f'{img_fn}_{n}_joints_projection.jpg'
+                        ),
+                        projection_img
+                    )
+
+                if args.save_params:
+                    save_dict = {
+                        "pred_cam": out['pred_cam'][n].detach().cpu().numpy(),
+                        "cam_t": cam_t,
+                        "joints_3d": joints,
+                        "joints_2d": joints_2d,
+                        "vertices": verts,
+                        "vertices_2d": kpts_2d,
+                        "is_right": np.array(is_right),
+                    }
+
+                    if 'pred_mano_params' in out:
+                        mano_params = out['pred_mano_params']
+
+                        save_dict["mano_pose"] = (
+                            mano_params['hand_pose'][n]
+                            .detach()
+                            .cpu()
+                            .numpy()
+                        )
+
+                        save_dict["mano_shape"] = (
+                            mano_params['betas'][n]
+                            .detach()
+                            .cpu()
+                            .numpy()
+                        )
+
+                        save_dict["global_orient"] = (
+                            mano_params['global_orient'][n]
+                            .detach()
+                            .cpu()
+                            .numpy()
+                        )
+
+                    np.savez(
+                        os.path.join(
+                            args.out_folder,
+                            f'{img_fn}_{n}_params.npz'
+                        ),
+                        **save_dict
+                    )
                 # Save all meshes to disk
                 if args.save_mesh:
                     camera_translation = cam_t.copy()

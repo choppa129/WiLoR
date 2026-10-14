@@ -1,0 +1,11 @@
+defaults:
+  - default.yaml
+  - default_hamer.yaml
+
+# WiLoR uses manual optimization with separate generator and discriminator
+# backward passes, so each pass intentionally leaves one parameter group unused.
+strategy: ddp_find_unused_parameters_true
+accelerator: gpu
+devices: [0, 1, 2]
+num_nodes: 1
+sync_batchnorm: true

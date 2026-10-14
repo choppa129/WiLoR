@@ -1,0 +1,14 @@
+[
+  "Sources: local evaluation reports and saved model configurations",
+  "Sources: demo.py; hamer_official/code/demo.py; wilor/models/wilor.py",
+  "Sources: logs/train/runs/wilor_freihand_full_3gpu/{model_config.yaml,dataset_config.yaml,exec_time.log}",
+  "Source: evaluation/freihand_full_comparison/metrics.csv; scripts/evaluate_freihand.py",
+  "Sources: evaluation/scale_diagnostic/fixed_inputs/manifest.json; predictions/*/provenance.json",
+  "Source: evaluation/scale_diagnostic/report_stage2.md; predictions/*/metrics.csv",
+  "Source: evaluation/scale_diagnostic/camera_swap/{per_sample.csv,report.md}",
+  "Source: evaluation/scale_diagnostic/camera_swap/test1_000.jpg",
+  "Source: evaluation/scale_diagnostic/betas_ablation/{per_sample.csv,report.md}",
+  "Source: evaluation/scale_diagnostic/pose_ablation/{per_sample.csv,report.md}",
+  "Sources: pose_ablation/test1_000.jpg; betas_ablation/test1_000.jpg (under evaluation/scale_diagnostic)",
+  "Sources: all local scale_diagnostic reports; next steps are proposed, not completed"
+]

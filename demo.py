@@ -37,11 +37,32 @@ def main():
     parser.add_argument('--rescale_factor', type=float, default=2.0, help='Factor for padding the bbox')
     parser.add_argument('--file_type', nargs='+', default=['*.jpg', '*.png', '*.jpeg'], help='List of file extensions to consider')
     parser.add_argument('--fast',   dest='fast', action='store_true', default=False, help='Use FP16 and layer dropping to accelerate inference')
+    parser.add_argument('--initial_model', action='store_true', help='Use ViTPose-H initialization with a random WiLoR reconstruction head')
 
     args = parser.parse_args()
 
     # Download and load checkpoints
-    model, model_cfg = load_wilor(checkpoint_path = './pretrained_models/wilor_final.ckpt' , cfg_path= './pretrained_models/model_config.yaml')
+    # model, model_cfg = load_wilor(checkpoint_path = './pretrained_models/wilor_final.ckpt' , cfg_path= './pretrained_models/model_config.yaml')
+    model_cfg_path = './logs/train/runs/wilor_freihand_full_3gpu/model_config.yaml'
+    if args.initial_model:
+        from wilor.configs import get_config
+        torch.manual_seed(42)
+        model_cfg = get_config(model_cfg_path, update_cachedir=True)
+        model_cfg.defrost()
+        model_cfg.MODEL.BACKBONE.PRETRAINED_WEIGHTS = './hamer_training_data/vitpose_backbone.pth'
+        if 'BBOX_SHAPE' not in model_cfg.MODEL:
+            model_cfg.MODEL.BBOX_SHAPE = [192, 256]
+        model_cfg.MANO.DATA_DIR = './mano_data/'
+        model_cfg.MANO.MODEL_PATH = './mano_data/'
+        model_cfg.MANO.MEAN_PARAMS = './mano_data/mano_mean_params.npz'
+        model_cfg.freeze()
+        print('Loading ViTPose-H initialization with random WiLoR head (seed=42)')
+        model = WiLoR(model_cfg, init_renderer=False)
+    else:
+        model, model_cfg = load_wilor(
+            checkpoint_path='./logs/train/runs/wilor_freihand_full_3gpu/checkpoints/last.ckpt',
+            cfg_path=model_cfg_path,
+        )
     if args.fast:     
         torch.set_float32_matmul_precision('high')
         model = model.half()

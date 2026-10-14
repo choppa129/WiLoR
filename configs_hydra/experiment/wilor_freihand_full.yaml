@@ -1,0 +1,23 @@
+# @package _global_
+
+defaults:
+  - hamer_vit_transformer.yaml
+
+dataset_config: datasets_freihand_full.yaml
+
+GENERAL:
+  TOTAL_STEPS: 100_000
+  LOG_STEPS: 100
+  VAL_STEPS: 1_000
+  CHECKPOINT_STEPS: 1_000
+  CHECKPOINT_SAVE_TOP_K: 1
+  NUM_WORKERS: 8
+  PREFETCH_FACTOR: 2
+
+TRAIN:
+  BATCH_SIZE: 8
+  NUM_TRAIN_SAMPLES: 2
+  NUM_TEST_SAMPLES: 64
+
+seed: 42
+exp_name: wilor_freihand_full

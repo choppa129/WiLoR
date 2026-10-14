@@ -1,0 +1,18 @@
+[
+  "Sources: local evaluation reports and saved model configurations",
+  "Sources: demo.py; hamer_official/code/demo.py; wilor/models/wilor.py",
+  "Sources: logs/train/runs/wilor_freihand_full_3gpu/{model_config.yaml,dataset_config.yaml,exec_time.log}",
+  "Source: evaluation/freihand_full_comparison_corrected/metrics.csv; projection_audit/report.md",
+  "Sources: evaluation/scale_diagnostic/fixed_inputs/manifest.json; predictions/*/provenance.json",
+  "Source: evaluation/scale_diagnostic/report_stage2.md; predictions/*/metrics.csv",
+  "Source: evaluation/scale_diagnostic/camera_swap/{per_sample.csv,report.md}",
+  "Source: evaluation/scale_diagnostic/camera_swap/test1_000.jpg",
+  "Source: evaluation/scale_diagnostic/betas_ablation/{per_sample.csv,report.md}",
+  "Source: evaluation/scale_diagnostic/pose_ablation/{per_sample.csv,report.md}",
+  "Sources: pose_ablation/test1_000.jpg; betas_ablation/test1_000.jpg (under evaluation/scale_diagnostic)",
+  "Sources: evaluation/freihand_annotated_interventions_full/{summary.csv,provenance.json}",
+  "Sources: evaluation/freihand_annotated_interventions_full/{paired_summary.csv,report.md}",
+  "Sources: evaluation/freihand_loss_gradient_audit/{summary.csv,report.md,provenance.json}",
+  "Sources: full annotated intervention and loss-gradient audit; proposed experiment, not yet run",
+  "Sources: full annotated intervention, loss-gradient audit and all local scale_diagnostic reports"
+]

@@ -1,0 +1,15 @@
+# @package _global_
+
+# Shard-level split of the complete FreiHAND training release. Keeping the
+# validation shards disjoint avoids the leakage in the upstream mix_all config.
+DATASETS:
+  TRAIN:
+    FREIHAND-TRAIN:
+      WEIGHT: 1.0
+  VAL:
+    FREIHAND-VAL:
+      WEIGHT: 1.0
+  MOCAP: FREIHAND-MOCAP
+  BETAS_REG: true
+
+dataset_config: datasets_freihand_full.yaml

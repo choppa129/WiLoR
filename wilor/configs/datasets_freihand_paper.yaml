@@ -1,0 +1,7 @@
+# Both readers index all shards, then partition by original capture ID.
+FREIHAND-TRAIN:
+  TYPE: ImageDataset
+  URLS: hamer_training_data/dataset_tars/freihand-train/{000000..000130}.tar
+FREIHAND-VAL:
+  TYPE: ImageDataset
+  URLS: hamer_training_data/dataset_tars/freihand-train/{000000..000130}.tar

@@ -1,0 +1,205 @@
+{
+  "status": "passed",
+  "scope": "Paper-explicit reconstruction changes, FreiHAND-only; short training validation, not an accuracy reproduction",
+  "sources": {
+    "paper": "https://arxiv.org/html/2409.12259v2",
+    "author_batch": "https://github.com/rolpotamias/WiLoR/issues/19#issuecomment-2888436633",
+    "evaluation": "https://github.com/lmb-freiburg/freihand/blob/master/eval.py"
+  },
+  "changes": [
+    "Three parameter tokens: pose, shape, camera; 192 image tokens",
+    "ViTPose pretrained encoder; 96D 6D-rotation head converted to 48D axis-angle for parameter loss",
+    "Weak perspective for feature sampling and 2D supervision",
+    "L1 vertices and 2D joints, squared L2 pose and shape; unsquared L2 generator adversarial term",
+    "Training-only pose/shape/camera mean initialization",
+    "FreiHAND PA joint/mesh error and 5mm/15mm F-scores",
+    "Adam, lr=1e-5, weight_decay=1e-4, 1000 epochs, effective batch=1024",
+    "Drop incomplete training batches to preserve effective batch size"
+  ],
+  "tests": [
+    "test_paper_literal.py",
+    "test_paper_training.py",
+    "test_weak_perspective.py",
+    "test_reprojection_units.py",
+    "audit_paper_data.py"
+  ],
+  "runs": {
+    "initial": {
+      "path": "logs/paper_literal_validation_20261014",
+      "epoch": 0,
+      "global_step": 4,
+      "optimizer_steps": [
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ],
+      "all_parameters_finite": true,
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 10.255438804626465,
+        "train/loss_vertices": 193.24249267578125,
+        "train/loss_keypoints_2d": 54.78614807128906,
+        "train/loss_keypoints_3d": 5.4284987449646,
+        "train/loss_global_orient": 9.986787796020508,
+        "train/loss_hand_pose": 31.928363800048828,
+        "train/loss_betas": 2.9199159145355225,
+        "train/loss_gen": 4.15684700012207,
+        "train/loss_disc": 21.970605850219727,
+        "train/loss_step": 10.255438804626465,
+        "epoch": 0.0,
+        "val/loss": 7.006063461303711,
+        "val/loss_vertices": 124.89280700683594,
+        "val/loss_keypoints_2d": 72.55322265625,
+        "val/loss_keypoints_3d": 3.4325523376464844,
+        "val/loss_global_orient": 4.313523769378662,
+        "val/loss_hand_pose": 27.51030921936035,
+        "val/loss_betas": 8.13441276550293,
+        "val/mpjpe_mm": 106.4023666381836,
+        "val/pa_mpjpe_mm": 21.025537490844727,
+        "val/reprojection_px": 635.5496826171875,
+        "val/pve_mm": 103.53335571289062,
+        "val/pa_mpvpe_mm": 22.977027893066406,
+        "val/f_at_5mm": 0.2475723922252655,
+        "val/f_at_15mm": 0.724236786365509,
+        "train/loss_epoch": 9.316133499145508
+      }
+    },
+    "resume": {
+      "path": "logs/paper_literal_resume_validation_20261014",
+      "epoch": 1,
+      "global_step": 8,
+      "optimizer_steps": [
+        [
+          4
+        ],
+        [
+          4
+        ]
+      ],
+      "all_parameters_finite": true,
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 9.088204383850098,
+        "train/loss_vertices": 166.2745819091797,
+        "train/loss_keypoints_2d": 72.74873352050781,
+        "train/loss_keypoints_3d": 4.635046005249023,
+        "train/loss_global_orient": 11.14208984375,
+        "train/loss_hand_pose": 32.28742980957031,
+        "train/loss_betas": 2.9412589073181152,
+        "train/loss_gen": 4.174398422241211,
+        "train/loss_disc": 21.902441024780273,
+        "train/loss_step": 9.088204383850098,
+        "epoch": 1.0,
+        "val/loss": 6.916334629058838,
+        "val/loss_vertices": 117.07626342773438,
+        "val/loss_keypoints_2d": 102.69049835205078,
+        "val/loss_keypoints_3d": 3.1916372776031494,
+        "val/loss_global_orient": 3.8846399784088135,
+        "val/loss_hand_pose": 27.6535587310791,
+        "val/loss_betas": 8.156582832336426,
+        "val/mpjpe_mm": 98.41814422607422,
+        "val/pa_mpjpe_mm": 21.324785232543945,
+        "val/reprojection_px": 901.6571655273438,
+        "val/pve_mm": 96.2259292602539,
+        "val/pa_mpvpe_mm": 23.29486656188965,
+        "val/f_at_5mm": 0.2494267374277115,
+        "val/f_at_15mm": 0.721115231513977,
+        "train/loss_epoch": 9.11452865600586
+      }
+    },
+    "ddp": {
+      "path": "logs/paper_literal_ddp_validation_20261014",
+      "epoch": 0,
+      "global_step": 2,
+      "optimizer_steps": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "all_parameters_finite": true,
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 8.327954292297363,
+        "train/loss_vertices": 162.4059295654297,
+        "train/loss_keypoints_2d": 16.53512954711914,
+        "train/loss_keypoints_3d": 4.699294090270996,
+        "train/loss_global_orient": 2.3510868549346924,
+        "train/loss_hand_pose": 34.88872146606445,
+        "train/loss_betas": 5.865542888641357,
+        "train/loss_gen": 4.268689155578613,
+        "train/loss_disc": 19.126680374145508,
+        "train/loss_step": 8.327954292297363,
+        "epoch": 0.0,
+        "val/loss": 8.308396339416504,
+        "val/loss_vertices": 158.5958709716797,
+        "val/loss_keypoints_2d": 34.34160614013672,
+        "val/loss_keypoints_3d": 4.423549652099609,
+        "val/loss_global_orient": 2.635082721710205,
+        "val/loss_hand_pose": 30.746639251708984,
+        "val/loss_betas": 3.610111713409424,
+        "val/mpjpe_mm": 116.01594543457031,
+        "val/pa_mpjpe_mm": 20.705615997314453,
+        "val/reprojection_px": 364.772705078125,
+        "val/pve_mm": 112.38232421875,
+        "val/pa_mpvpe_mm": 22.590591430664062,
+        "val/f_at_5mm": 0.2586081326007843,
+        "val/f_at_15mm": 0.7375459671020508,
+        "train/loss_epoch": 8.327954292297363
+      }
+    }
+  },
+  "resume_parameter_updates": {
+    "backbone.patch_embed.proj.weight": 2.0094215869903564e-05,
+    "backbone.pose_emb.weight": 1.9377097487449646e-05,
+    "refine_net.deconv.first_conv.0.weight": 1.9975006580352783e-05,
+    "refine_net.dec_pose.weight": 1.9961968064308167e-05,
+    "refine_net.dec_shape.weight": 1.9934028387069702e-05,
+    "refine_net.dec_cam.weight": 1.9934028387069702e-05
+  },
+  "mean_initialization": {
+    "training_examples": 117216,
+    "rejected_camera_fits": 0,
+    "seed": 42,
+    "holdout": 0.1,
+    "training_ids_sha256": "dd32eada9a8374217ba4419f48268c8ca68aeda4a9c38efdcf3945d9ecb07af2",
+    "method": "Compute training-only FreiHAND pose/shape/camera means for paper mode.\n\nThe paper does not publish its averaging or camera fitting procedure. Here we\naverage annotated axis-angle/shape vectors and fit a shared XY scale + translation\nto unaugmented crop keypoints for each annotated MANO mesh. These are recorded\nimplementation choices, not a claim about the authors' unpublished preprocessing.\n",
+    "mean_camera": [
+      6.139217376708984,
+      -0.09631869941949844,
+      0.012247533537447453
+    ]
+  },
+  "data": {
+    "train_images": 117216,
+    "validation_images": 13024,
+    "train_capture_ids": 29304,
+    "validation_capture_ids": 3256,
+    "train_prior_labels": 117216,
+    "eight_rank_samples_per_rank": 14652,
+    "full_batches_per_rank": 114,
+    "retained_images_per_epoch": 116736,
+    "dropped_images_per_epoch": 480,
+    "status": "PASS: disjoint groups, full epoch, no rank overlap, worker loading"
+  },
+  "full_training_started": false,
+  "unpublished_details_and_local_choices": [
+    "Exact original epoch length and sampling schedule are unpublished; use shuffled finite FreiHAND epochs with incomplete batch dropped.",
+    "Camera normalization: xy=0.5*s*(XY+t); crop-aware align_corners=False bilinear sampling. The paper does not specify normalized coordinates.",
+    "Mean pose uses arithmetic axis-angle averaging; cameras use weighted weak-perspective least squares on unaugmented training crops. Averaging/fitting method not published.",
+    "Reconstruction augmentation magnitudes inherited from HaMeR: scale .3, rotation factor30/rate.6, color .2; no translation/flip/extreme crop. Paper states augmentation types only.",
+    "Batch reduction averages per-example coordinate sums; discriminator architecture and its squared real/fake training objective follow the released HaMeR-style implementation. Only generator norm is explicit in Eq8.",
+    "FP32 used; paper does not specify precision, exact learning-rate schedule, Adam betas, or all internal backbone/refinement architectural details. Keep released 1280-wide encoder/refinement details where the text is silent.",
+    "Validation uses grouped FreiHAND holdout and MANO-decoded vertex targets, not the official held-out benchmark.",
+    "Smoke DDP uses two GPUs and small batches; eight-rank full-batch sampling is audited without launching 1000-epoch training.",
+    "Old 16-pose-token reconstruction checkpoints cannot resume the new 1-pose-token model. ViTPose encoder weights remain compatible."
+  ]
+}

@@ -1,0 +1,57 @@
+# @package _global_
+# Paper-aligned starting point, NOT a complete reproduction recipe.
+# Source: https://arxiv.org/html/2409.12259v2#A7.SS2
+defaults:
+  - hamer_vit_transformer.yaml
+  - override /data: freihand_full.yaml
+
+dataset_config: datasets_freihand_paper.yaml
+
+TRAIN:
+  PAPER_MODE: true
+  LR: 1e-5
+  WEIGHT_DECAY: 1e-4
+  # Author clarification: issue #19, 8 GPUs, effective batch 1024.
+  BATCH_SIZE: 128
+  NUM_TRAIN_SAMPLES: 1
+
+MODEL:
+  PROJECTION: weak_perspective
+  PAPER_LITERAL: true
+
+MANO:
+  MEAN_PARAMS: hamer_training_data/freihand_paper_mean_params.npz
+
+LOSS_WEIGHTS:
+  VERTICES_3D: 0.05
+  KEYPOINTS_3D: 0.0
+  KEYPOINTS_2D: 0.01
+  GLOBAL_ORIENT: 0.001
+  HAND_POSE: 0.001
+  BETAS: 0.0005
+  ADVERSARIAL: 0.0005
+
+DATASETS:
+  # Do not turn unavailable shape labels into zero-shape ground truth.
+  BETAS_REG: false
+  # Local single-dataset epoch definition, not specified by the paper.
+  FINITE_FREIHAND: true
+  # Keep every optimizer update at the author's effective batch size (1024).
+  DROP_LAST_TRAIN: true
+  FREIHAND_HOLDOUT: 0.1
+  CONFIG:
+    # Only scaling, rotation and color jitter are stated for reconstruction.
+    TRANS_FACTOR: 0.0
+    TRANS_AUG_RATE: 0.0
+
+trainer:
+  max_epochs: 1000
+  max_steps: -1
+  strategy: ddp_find_unused_parameters_true
+  val_check_interval: 1.0
+  limit_val_batches: 1.0
+  # Precision is not published; use full precision instead of assuming BF16.
+  precision: 32-true
+
+seed: 42
+exp_name: wilor_paper

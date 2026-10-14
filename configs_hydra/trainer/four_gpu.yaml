@@ -1,0 +1,13 @@
+defaults:
+  - default.yaml
+  - default_hamer.yaml
+
+# Use the four locally available GPUs. TRAIN.BATCH_SIZE is per process/GPU,
+# so the current FreiHAND setting of 8 gives a global batch size of 32.
+# WiLoR uses manual optimization with separate generator and discriminator
+# backward passes, so each pass intentionally leaves one parameter group unused.
+strategy: ddp_find_unused_parameters_true
+accelerator: gpu
+devices: [0, 1, 2, 3]
+num_nodes: 1
+sync_batchnorm: true

@@ -1,0 +1,23 @@
+# @package _global_
+
+# Stage 1: verify that WiLoR can learn FreiHAND from a ViTPose-H
+# initialization before scaling to the complete dataset.
+defaults:
+  - wilor_smoke.yaml
+
+GENERAL:
+  TOTAL_STEPS: 1_000
+  LOG_STEPS: 20
+  VAL_STEPS: 100
+  CHECKPOINT_STEPS: 100
+  CHECKPOINT_SAVE_TOP_K: 2
+  NUM_WORKERS: 4
+  PREFETCH_FACTOR: 2
+
+TRAIN:
+  BATCH_SIZE: 4
+  NUM_TRAIN_SAMPLES: 1
+  NUM_TEST_SAMPLES: 64
+
+seed: 42
+exp_name: wilor_freihand_phase1

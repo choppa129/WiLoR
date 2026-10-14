@@ -32,5 +32,13 @@ def load_wilor(checkpoint_path, cfg_path):
         model_cfg.MANO.MEAN_PARAMS = './mano_data/mano_mean_params.npz'
         model_cfg.freeze()
 
-    model = WiLoR.load_from_checkpoint(checkpoint_path, strict=False, cfg=model_cfg)
+    # Training checkpoints contain trusted Lightning/OmegaConf metadata in
+    # addition to tensor weights. PyTorch 2.6 defaults to weights_only=True,
+    # which rejects that metadata, so opt in to full loading explicitly.
+    model = WiLoR.load_from_checkpoint(
+        checkpoint_path,
+        strict=False,
+        cfg=model_cfg,
+        weights_only=False,
+    )
     return model, model_cfg

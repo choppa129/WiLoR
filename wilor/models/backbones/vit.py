@@ -249,11 +249,12 @@ class ViT(nn.Module):
         self.register_buffer('init_hand_pose', init_hand_pose)
         self.register_buffer('init_betas', init_betas)
         
-        self.pose_emb  = nn.Linear(self.joint_rep_dim  , embed_dim)
+        self.num_pose_tokens = 1 if cfg.MODEL.get('PAPER_LITERAL', False) else cfg.MANO.NUM_HAND_JOINTS + 1
+        self.pose_emb = nn.Linear(npose if self.num_pose_tokens == 1 else self.joint_rep_dim, embed_dim)
         self.shape_emb = nn.Linear(10  , embed_dim)
         self.cam_emb   = nn.Linear(3 , embed_dim)
         
-        self.decpose  = nn.Linear(self.num_features, 6)
+        self.decpose = nn.Linear(self.num_features, npose if self.num_pose_tokens == 1 else 6)
         self.decshape = nn.Linear(self.num_features, 10)
         self.deccam   = nn.Linear(self.num_features, 3)
         if cfg.MODEL.MANO_HEAD.get('INIT_DECODER_XAVIER', False):
@@ -355,7 +356,7 @@ class ViT(nn.Module):
             x = x + self.pos_embed[:, 1:] + self.pos_embed[:, :1]
         # X [B, 192, 1280]
         # x cat [ mean_pose, mean_shape, mean_cam] tokens 
-        pose_tokens  = self.pose_emb(self.init_hand_pose.reshape(1, self.cfg.MANO.NUM_HAND_JOINTS + 1, self.joint_rep_dim)).repeat(B, 1, 1)
+        pose_tokens = self.pose_emb(self.init_hand_pose.reshape(1, self.num_pose_tokens, -1)).repeat(B, 1, 1)
         shape_tokens = self.shape_emb(self.init_betas).unsqueeze(1).repeat(B, 1, 1)
         cam_tokens   = self.cam_emb(self.init_cam).unsqueeze(1).repeat(B, 1, 1)
         
@@ -371,9 +372,9 @@ class ViT(nn.Module):
         x = self.last_norm(x)
         
         
-        pose_feat  = x[:, :(self.cfg.MANO.NUM_HAND_JOINTS + 1)]
-        shape_feat = x[:, (self.cfg.MANO.NUM_HAND_JOINTS + 1):1+(self.cfg.MANO.NUM_HAND_JOINTS + 1)]
-        cam_feat   = x[:, 1+(self.cfg.MANO.NUM_HAND_JOINTS + 1):2+(self.cfg.MANO.NUM_HAND_JOINTS + 1)]
+        pose_feat = x[:, :self.num_pose_tokens]
+        shape_feat = x[:, self.num_pose_tokens:self.num_pose_tokens + 1]
+        cam_feat = x[:, self.num_pose_tokens + 1:self.num_pose_tokens + 2]
         
         #print(pose_feat.shape, shape_feat.shape, cam_feat.shape)
         pred_hand_pose = self.decpose(pose_feat).reshape(B, -1) + self.init_hand_pose  #B , 96
@@ -396,7 +397,7 @@ class ViT(nn.Module):
                             'hand_pose': pred_hand_pose[:, 1:],
                             'betas': pred_betas}
         
-        img_feat = x[:, 2+(self.cfg.MANO.NUM_HAND_JOINTS + 1):].reshape(B, Hp, Wp, -1).permute(0, 3, 1, 2)
+        img_feat = x[:, self.num_pose_tokens + 2:].reshape(B, Hp, Wp, -1).permute(0, 3, 1, 2)
         return pred_mano_params, pred_cam, pred_mano_feats, img_feat
 
     def forward(self, x):

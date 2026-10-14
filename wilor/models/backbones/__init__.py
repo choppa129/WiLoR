@@ -9,7 +9,11 @@ def create_backbone(cfg):
         from timm.models import create_model
         #from models.modules.mobileone import reparameterize_model
         fast_vit = create_model("fastvit_ma36", drop_path_rate=0.2)
-        checkpoint = torch.load('./pretrained_models/fastvit_ma36.pt')
+        checkpoint = torch.load(
+            './pretrained_models/fastvit_ma36.pt',
+            map_location='cpu',
+            weights_only=False,
+        )
         fast_vit.load_state_dict(checkpoint['state_dict'])
         return fast_vit
         

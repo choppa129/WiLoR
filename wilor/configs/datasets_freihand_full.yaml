@@ -1,0 +1,9 @@
+FREIHAND-TRAIN:
+  TYPE: ImageDataset
+  URLS: hamer_training_data/dataset_tars/freihand-train/{000000..000119}.tar
+  epoch_size: 120000
+FREIHAND-VAL:
+  TYPE: ImageDataset
+  URLS: hamer_training_data/dataset_tars/freihand-train/{000120..000130}.tar
+FREIHAND-MOCAP:
+  DATASET_FILE: hamer_training_data/freihand_mocap.npz

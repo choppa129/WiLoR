@@ -1,0 +1,21 @@
+# @package _global_
+
+defaults:
+  - hamer_vit_transformer.yaml
+
+dataset_config: datasets_freihand_mini.yaml
+
+GENERAL:
+  TOTAL_STEPS: 10
+  LOG_STEPS: 1
+  VAL_STEPS: 5
+  CHECKPOINT_STEPS: 5
+  CHECKPOINT_SAVE_TOP_K: 1
+  NUM_WORKERS: 2
+  PREFETCH_FACTOR: 2
+
+TRAIN:
+  BATCH_SIZE: 1
+  NUM_TRAIN_SAMPLES: 1
+
+exp_name: wilor_smoke

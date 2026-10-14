@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn 
 import torch.nn.functional as F 
 import math 
-from ...utils.geometry import rot6d_to_rotmat, aa_to_rotmat
+from ...utils.geometry import rot6d_to_rotmat, aa_to_rotmat, weak_perspective_feature_grid
 from typing import Optional
 
 def make_linear_layers(feat_dims, relu_final=True, use_bn=False):
@@ -168,37 +168,42 @@ class RefineNet(nn.Module):
         
         img_feat_sizes = [img_feat.shape[2] for img_feat in img_feats] 
         
-        temp_cams  = [torch.stack([pred_cam[:, 1], pred_cam[:, 2],  
-                                  2*focal_length[:, 0]/(img_feat_size * pred_cam[:, 0] +1e-9)],dim=-1) for img_feat_size in img_feat_sizes] 
+        if self.cfg.MODEL.get('PROJECTION', 'perspective') == 'weak_perspective':
+            grid = weak_perspective_feature_grid(
+                verts_3d, pred_cam, self.cfg.MODEL.IMAGE_SIZE, crop_margin=32)
+            vert_feats = [F.grid_sample(feat, grid.unsqueeze(2), align_corners=False)
+                          .squeeze(-1).amax(dim=-1) for feat in img_feats]
+        else:
+            vert_feats = self.sample_perspective_features(img_feats, img_feat_sizes,
+                                                        verts_3d, pred_cam, focal_length)
+
+        vert_feats = torch.cat(vert_feats, dim=-1)
+
+        delta_pose = self.dec_pose(vert_feats)
+        delta_betas = self.dec_shape(vert_feats)
+        delta_cam = self.dec_cam(vert_feats)
+        pred_hand_pose = pred_mano_feats['hand_pose'] + delta_pose
+        pred_betas = pred_mano_feats['betas'] + delta_betas
+        pred_cam = pred_mano_feats['cam'] + delta_cam
+        joint_conversion_fn = {
+            '6d': rot6d_to_rotmat,
+            'aa': lambda x: aa_to_rotmat(x.view(-1, 3).contiguous())
+        }[self.joint_rep_type]
+        pred_hand_pose = joint_conversion_fn(pred_hand_pose).view(B, self.cfg.MANO.NUM_HAND_JOINTS+1, 3, 3)
+        pred_mano_params = {'global_orient': pred_hand_pose[:, [0]],
+                            'hand_pose': pred_hand_pose[:, 1:], 'betas': pred_betas}
+        return pred_mano_params, pred_cam
+
+    @staticmethod
+    def sample_perspective_features(img_feats, img_feat_sizes, verts_3d, pred_cam, focal_length):
+        temp_cams  = [torch.stack([pred_cam[:, 1], pred_cam[:, 2],
+                                  2*focal_length[:, 0]/(img_feat_size * pred_cam[:, 0] +1e-9)],dim=-1) for img_feat_size in img_feat_sizes]
 
         verts_2d   = [perspective_projection(verts_3d,
                                 translation=temp_cams[i],
                                 focal_length=focal_length / img_feat_sizes[i]) for i in range(len(img_feat_sizes))]
         
-        vert_feats = [sample_joint_features(img_feats[i], verts_2d[i]).max(1).values  for i in range(len(img_feat_sizes))] 
+        vert_feats = [sample_joint_features(img_feats[i], verts_2d[i]).max(1).values for i in range(len(img_feat_sizes))]
 
-        vert_feats = torch.cat(vert_feats, dim=-1)
-
-        delta_pose  = self.dec_pose(vert_feats)
-        delta_betas = self.dec_shape(vert_feats)
-        delta_cam   = self.dec_cam(vert_feats)
-
-        
-        pred_hand_pose = pred_mano_feats['hand_pose'] + delta_pose
-        pred_betas     = pred_mano_feats['betas']     + delta_betas 
-        pred_cam       = pred_mano_feats['cam']       + delta_cam
-
-        joint_conversion_fn = {
-                '6d': rot6d_to_rotmat,
-                'aa': lambda x: aa_to_rotmat(x.view(-1, 3).contiguous())
-            }[self.joint_rep_type]
- 
-        pred_hand_pose = joint_conversion_fn(pred_hand_pose).view(B, self.cfg.MANO.NUM_HAND_JOINTS+1, 3, 3)
-        
-        pred_mano_params = {'global_orient': pred_hand_pose[:, [0]],
-                            'hand_pose': pred_hand_pose[:, 1:],
-                            'betas': pred_betas}
-        
-        return  pred_mano_params, pred_cam
-    
+        return vert_feats
     

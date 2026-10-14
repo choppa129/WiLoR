@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+
+# Local training data and generated training outputs.
+hamer_training_data/
+training_data_downloads/
+logs/
+*.log
+*.ckpt
+*.pt
+*.pth
+*.pkl
+demo_out*/
+mano_data/
+pretrained_models/
+
+# Local reference checkout and generated evaluation artifacts.
+hamer_official/
+evaluation/

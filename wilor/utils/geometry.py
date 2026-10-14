@@ -2,6 +2,52 @@ from typing import Optional
 import torch
 from torch.nn import functional as F
 
+def rotmat_to_axis_angle(matrix: torch.Tensor):
+    """Principal axis-angle through the best-conditioned quaternion branch.
+
+    Supports identity and rotations near pi without dividing by sin(angle).
+    Like any principal axis-angle chart, it has a branch cut at pi.
+    """
+    r = matrix
+    r00, r11, r22 = r[..., 0, 0], r[..., 1, 1], r[..., 2, 2]
+    diagonal = torch.stack((1+r00+r11+r22, 1+r00-r11-r22,
+                            1-r00+r11-r22, 1-r00-r11+r22), -1)
+    w = torch.stack((diagonal[..., 0], r[..., 2, 1]-r[..., 1, 2],
+                     r[..., 0, 2]-r[..., 2, 0], r[..., 1, 0]-r[..., 0, 1]), -1)
+    x = torch.stack((w[..., 1], diagonal[..., 1], r[..., 0, 1]+r[..., 1, 0],
+                     r[..., 0, 2]+r[..., 2, 0]), -1)
+    y = torch.stack((w[..., 2], x[..., 2], diagonal[..., 2], r[..., 1, 2]+r[..., 2, 1]), -1)
+    z = torch.stack((w[..., 3], x[..., 3], y[..., 3], diagonal[..., 3]), -1)
+    candidates = torch.stack((w, x, y, z), -2)
+    index = diagonal.argmax(-1)[..., None, None].expand(*diagonal.shape[:-1], 1, 4)
+    q = F.normalize(candidates.gather(-2, index).squeeze(-2), dim=-1)
+    q = torch.where(q[..., :1] < 0, -q, q)
+    half_angle = torch.atan2(torch.linalg.vector_norm(q[..., 1:], dim=-1), q[..., 0])
+    return q[..., 1:] / (0.5 * torch.sinc(half_angle / torch.pi))[..., None]
+
+def weak_perspective_projection(points: torch.Tensor, camera: torch.Tensor):
+    """Scaled orthographic projection into full-crop pixel / size - 0.5 units.
+
+    camera=(s, tx, ty), with translation before scaling, as in the existing
+    camera-to-translation conversion. xy = s/2 * (XY + t); Z has no effect.
+    The factor 1/2 matches this repository's [-0.5, 0.5] label convention.
+    The paper names weak perspective but does not specify this normalization.
+    """
+    return camera[:, None, :1] * (points[..., :2] + camera[:, None, 1:]) / 2
+
+
+def weak_perspective_feature_grid(points, camera, image_size=256, crop_margin=32):
+    """Map full-crop projection to the horizontally cropped ViT feature grid.
+
+    align_corners=False: pixel centers and all pyramid resolutions share one
+    normalized grid. Account for the 32-pixel crop on each side of the input.
+    """
+    xy = weak_perspective_projection(points, camera)
+    pixels = (xy + 0.5) * image_size
+    x = 2 * (pixels[..., 0] - crop_margin + 0.5) / (image_size - 2 * crop_margin) - 1
+    y = 2 * (pixels[..., 1] + 0.5) / image_size - 1
+    return torch.stack((x, y), dim=-1)
+
 def aa_to_rotmat(theta: torch.Tensor):
     """
     Convert axis-angle representation to rotation matrix.

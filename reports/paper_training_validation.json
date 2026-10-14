@@ -1,0 +1,193 @@
+{
+  "status": "historical_pass_before_paper_literal_changes",
+  "scope": "FreiHAND-only paper-aligned reconstruction; smoke validation, not accuracy reproduction",
+  "sources": {
+    "paper": "https://arxiv.org/html/2409.12259v2#A7.SS2",
+    "author_batch_size": "https://github.com/rolpotamias/WiLoR/issues/19#issuecomment-2888436633",
+    "author_training_reference": "https://github.com/rolpotamias/WiLoR/issues/20#issuecomment-2514445435",
+    "freihand_variants": "https://github.com/lmb-freiburg/freihand"
+  },
+  "data": {
+    "train_images": 117216,
+    "validation_images": 13024,
+    "train_captures": 29304,
+    "validation_captures": 3256,
+    "capture_overlap": 0,
+    "eight_rank_samples_per_rank": 14652,
+    "sampling": "finite shuffled pass; distributed sampler; no replacement for images",
+    "holdout_fraction": 0.1,
+    "seed": 42,
+    "prior": "only complete MANO labels from the training split"
+  },
+  "projection": {
+    "formula": "normalized_xy = 0.5 * s * (XY + t_xy)",
+    "normalization": "pixel / full_crop_size - 0.5",
+    "feature_grid": "full crop 256x256 to center crop 256x192; align_corners=False",
+    "tests": [
+      "analytic values",
+      "depth invariance",
+      "autograd gradcheck",
+      "three-scale coordinate-ramp sampling"
+    ]
+  },
+  "pretrained_checkpoint_audit": {
+    "epoch": 0,
+    "global_step": 4,
+    "optimizers": 2,
+    "optimizer_steps": [
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "pretrained_tensor_count": 389,
+    "encoder_max_update": 2.0014122128486633e-05,
+    "all_parameters_finite": true
+  },
+  "training_checks": {
+    "initial": {
+      "epoch": 0,
+      "global_step": 4,
+      "optimizer_steps": [
+        [
+          2
+        ],
+        [
+          2
+        ]
+      ],
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 8.257550239562988,
+        "train/loss_vertices": 313.421142578125,
+        "train/loss_keypoints_2d": 79.595947265625,
+        "train/loss_keypoints_3d": 8.636631965637207,
+        "train/loss_global_orient": 14.852478981018066,
+        "train/loss_hand_pose": 26.80780029296875,
+        "train/loss_betas": 12.843770980834961,
+        "train/loss_gen": 18.3446044921875,
+        "train/loss_disc": 19.67656707763672,
+        "val/loss": 7.610490322113037,
+        "val/loss_vertices": 286.3887939453125,
+        "val/loss_keypoints_2d": 82.63048553466797,
+        "val/loss_keypoints_3d": 7.7823567390441895,
+        "val/loss_global_orient": 10.517149925231934,
+        "val/loss_hand_pose": 53.210105895996094,
+        "val/loss_betas": 23.017925262451172,
+        "val/mpjpe_mm": 123.512939453125,
+        "val/pa_mpjpe_mm": 25.291778564453125,
+        "val/reprojection_px": 435.20989990234375,
+        "val/pve_mm": 118.96859741210938,
+        "epoch": 0.0
+      }
+    },
+    "resume": {
+      "epoch": 1,
+      "global_step": 8,
+      "optimizer_steps": [
+        [
+          4
+        ],
+        [
+          4
+        ]
+      ],
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 6.8941569328308105,
+        "train/loss_vertices": 128.33270263671875,
+        "train/loss_keypoints_2d": 43.20820617675781,
+        "train/loss_keypoints_3d": 3.4959521293640137,
+        "train/loss_global_orient": 7.176451206207275,
+        "train/loss_hand_pose": 25.530651092529297,
+        "train/loss_betas": 6.4214043617248535,
+        "train/loss_gen": 19.04346466064453,
+        "train/loss_disc": 19.74359130859375,
+        "train/loss_step": 6.8941569328308105,
+        "epoch": 1.0,
+        "val/loss": 6.821011543273926,
+        "val/loss_vertices": 126.16900634765625,
+        "val/loss_keypoints_2d": 46.189064025878906,
+        "val/loss_keypoints_3d": 3.408599853515625,
+        "val/loss_global_orient": 4.917391777038574,
+        "val/loss_hand_pose": 40.05219268798828,
+        "val/loss_betas": 11.402265548706055,
+        "val/mpjpe_mm": 108.60157775878906,
+        "val/pa_mpjpe_mm": 29.24464988708496,
+        "val/reprojection_px": 514.5967407226562,
+        "val/pve_mm": 104.64112091064453,
+        "train/loss_epoch": 8.86970043182373
+      }
+    },
+    "ddp": {
+      "epoch": 0,
+      "global_step": 2,
+      "optimizer_steps": [
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "last_scalars": {
+        "lr-Adam": 9.999999747378752e-06,
+        "lr-Adam-1": 9.999999747378752e-06,
+        "train/loss": 8.51644515991211,
+        "train/loss_vertices": 165.43914794921875,
+        "train/loss_keypoints_2d": 20.095027923583984,
+        "train/loss_keypoints_3d": 4.81901741027832,
+        "train/loss_global_orient": 4.656981468200684,
+        "train/loss_hand_pose": 25.92587661743164,
+        "train/loss_betas": 8.028793334960938,
+        "train/loss_gen": 17.880218505859375,
+        "train/loss_disc": 18.214862823486328,
+        "train/loss_step": 8.51644515991211,
+        "epoch": 0.0,
+        "val/loss": 11.073914527893066,
+        "val/loss_vertices": 218.26950073242188,
+        "val/loss_keypoints_2d": 14.16016960144043,
+        "val/loss_keypoints_3d": 6.098148345947266,
+        "val/loss_global_orient": 7.2310686111450195,
+        "val/loss_hand_pose": 9.5960111618042,
+        "val/loss_betas": 4.02195930480957,
+        "val/mpjpe_mm": 150.8321990966797,
+        "val/pa_mpjpe_mm": 21.485939025878906,
+        "val/reprojection_px": 140.2680206298828,
+        "val/pve_mm": 144.8573455810547,
+        "train/loss_epoch": 8.51644515991211
+      }
+    },
+    "resume_parameter_updates": {
+      "backbone.patch_embed.proj.weight": 2.0088722521904856e-05,
+      "refine_net.deconv.first_conv.0.weight": 1.996755599975586e-05,
+      "refine_net.dec_pose.weight": 1.998990774154663e-05,
+      "refine_net.dec_shape.weight": 1.992844045162201e-05,
+      "refine_net.dec_cam.weight": 1.9567087292671204e-05
+    }
+  },
+  "full_training_config": {
+    "epochs": 1000,
+    "optimizer": "Adam",
+    "lr": 1e-05,
+    "weight_decay": 0.0001,
+    "gpus": 8,
+    "batch_per_gpu": 128,
+    "full_batch_effective_size": 1024,
+    "final_batch_effective_size": 480
+  },
+  "limitations": [
+    "Only short real training and validation runs were executed; no convergence claim.",
+    "Eight-rank sampling audited; real distributed smoke test used two GPUs.",
+    "The paper does not publish an exact epoch sampling schedule; finite FreiHAND traversal and grouped holdout are explicit local choices.",
+    "Weak-camera normalization and feature-coordinate convention are explicit implementation choices; author has not clarified the paper/code projection discrepancy.",
+    "3D vertex targets are decoded from complete MANO annotations; parameter losses keep the repository rotation-matrix representation.",
+    "Legacy perspective mesh overlays are disabled for weak-perspective training to avoid misleading visualization.",
+    "Exact mid-epoch random-state replay is not asserted; model and both optimizer states were verified on resume."
+  ],
+  "superseded_by": "reports/paper_literal_validation.json"
+}

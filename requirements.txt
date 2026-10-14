@@ -16,5 +16,6 @@ hydra-colorlog
 pyrootutils
 rich
 webdataset
+tensorboard
 gradio
 ultralytics==8.1.34

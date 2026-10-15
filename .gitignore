@@ -17,3 +17,6 @@ pretrained_models/
 # Local reference checkout and generated evaluation artifacts.
 hamer_official/
 evaluation/
+
+# Official evaluation downloads and extracted data.
+evaluation_data/

@@ -1,5 +1,6 @@
 # @package _global_
-# Paper-aligned starting point, NOT a complete reproduction recipe.
+# Paper training schedule with selected official WiLoR implementation details.
+# Official perspective projection and feature sampling; data recipe remains local.
 # Source: https://arxiv.org/html/2409.12259v2#A7.SS2
 defaults:
   - hamer_vit_transformer.yaml
@@ -9,6 +10,9 @@ dataset_config: datasets_freihand_paper.yaml
 
 TRAIN:
   PAPER_MODE: true
+  OFFICIAL_LOSSES: true
+  OPTIMIZER: adamw
+  REFERENCE_PER_RANK_BATCH_SIZE: 128
   LR: 1e-5
   WEIGHT_DECAY: 1e-4
   # Author clarification: issue #19, 8 GPUs, effective batch 1024.
@@ -16,15 +20,17 @@ TRAIN:
   NUM_TRAIN_SAMPLES: 1
 
 MODEL:
-  PROJECTION: weak_perspective
+  PROJECTION: perspective
   PAPER_LITERAL: true
+  # Explicit override: official 16 pose + 1 shape + 1 camera tokens.
+  NUM_POSE_TOKENS: 16
 
 MANO:
-  MEAN_PARAMS: hamer_training_data/freihand_paper_mean_params.npz
+  MEAN_PARAMS: mano_data/mano_mean_params.npz
 
 LOSS_WEIGHTS:
-  VERTICES_3D: 0.05
-  KEYPOINTS_3D: 0.0
+  VERTICES_3D: 0.0
+  KEYPOINTS_3D: 0.05
   KEYPOINTS_2D: 0.01
   GLOBAL_ORIENT: 0.001
   HAND_POSE: 0.001
@@ -40,9 +46,9 @@ DATASETS:
   DROP_LAST_TRAIN: true
   FREIHAND_HOLDOUT: 0.1
   CONFIG:
-    # Only scaling, rotation and color jitter are stated for reconstruction.
-    TRANS_FACTOR: 0.0
-    TRANS_AUG_RATE: 0.0
+    # Published WiLoR checkpoint config includes translation augmentation.
+    TRANS_FACTOR: 0.02
+    TRANS_AUG_RATE: 0.5
 
 trainer:
   max_epochs: 1000

@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/lmb-freiburg/freihand",
+  "commit": "5ea4ab9763fea0eec988a52bfa563333cb16523f",
+  "files": {
+    "eval.py": {
+      "url": "https://raw.githubusercontent.com/lmb-freiburg/freihand/5ea4ab9763fea0eec988a52bfa563333cb16523f/eval.py",
+      "sha256": "4213f7414ad51dbe6d8ffe08cbbfeac7ae1658f90ef0e7f301fd825ea52d2cd9"
+    },
+    "utils/eval_util.py": {
+      "url": "https://raw.githubusercontent.com/lmb-freiburg/freihand/5ea4ab9763fea0eec988a52bfa563333cb16523f/utils/eval_util.py",
+      "sha256": "3ab3cc239baa2f64816a612f834014cadc2ec387b803a8f89014c29fac25d97e"
+    }
+  },
+  "usage": "Unmodified upstream snapshots. Wrapper loads only metric definitions and supplies a SciPy nearest-neighbor backend for deprecated Open3D API."
+}

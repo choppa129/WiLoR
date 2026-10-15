@@ -1,0 +1,12 @@
+{
+  "FreiHAND_pub_v2_eval.zip": {
+    "source": "https://lmb.informatik.uni-freiburg.de/data/freihand/FreiHAND_pub_v2_eval.zip",
+    "sha256": "7f1968695971479149e28c0fe9495fabee930c48d171cfba739cfd7eeca35712",
+    "bytes": 758382230
+  },
+  "hamer_evaluation_data.tar.gz": {
+    "source": "https://www.dropbox.com/scl/fi/7ip2vnnu355e2kqbyn1bc/hamer_evaluation_data.tar.gz?rlkey=nb4x10uc8mj2qlfq934t5mdlh&dl=1",
+    "sha256": "c1c199e3af3e33428d73251a4c7b41a2edc1837a24c0e97100e85f070e85c857",
+    "bytes": 3933988
+  }
+}

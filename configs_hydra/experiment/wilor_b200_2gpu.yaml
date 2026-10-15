@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - wilor_paper.yaml
+
+# Keep 1024 images per update without gradient accumulation.
+TRAIN:
+  BATCH_SIZE: 512
+MODEL:
+  BACKBONE:
+    USE_CHECKPOINT: true
+GENERAL:
+  NUM_WORKERS: 4
+  ENABLE_VISUALIZATION: false
+trainer:
+  devices: 2
+  precision: 32-true
+exp_name: wilor_b200_2gpu

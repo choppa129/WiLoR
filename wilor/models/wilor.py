@@ -110,7 +110,9 @@ class WiLoR(pl.LightningModule):
         """
         param_groups = [{'params': filter(lambda p: p.requires_grad, self.get_parameters()), 'lr': self.cfg.TRAIN.LR}]
 
-        optimizer_cls = torch.optim.Adam if self.cfg.TRAIN.get('PAPER_MODE', False) else torch.optim.AdamW
+        optimizer_name = self.cfg.TRAIN.get(
+            'OPTIMIZER', 'adam' if self.cfg.TRAIN.get('PAPER_MODE', False) else 'adamw')
+        optimizer_cls = {'adam': torch.optim.Adam, 'adamw': torch.optim.AdamW}[optimizer_name]
         optimizer = optimizer_cls(params=param_groups,
                                         # lr=self.cfg.TRAIN.LR,
                                         weight_decay=self.cfg.TRAIN.WEIGHT_DECAY)
@@ -254,7 +256,8 @@ class WiLoR(pl.LightningModule):
         loss_mano_params = {}
         for k, pred in pred_mano_params.items():
             gt = gt_mano_params[k].view(batch_size, -1)
-            if self.cfg.MODEL.get('PAPER_LITERAL', False) and k != 'betas':
+            if (self.cfg.MODEL.get('PAPER_LITERAL', False)
+                    and not self.cfg.TRAIN.get('OFFICIAL_LOSSES', False) and k != 'betas'):
                 pred = rotmat_to_axis_angle(pred.float().reshape(batch_size, -1, 3, 3))
                 if not is_axis_angle[k].all():
                     gt = rotmat_to_axis_angle(gt.float().reshape(batch_size, -1, 3, 3))
@@ -264,7 +267,8 @@ class WiLoR(pl.LightningModule):
             loss_mano_params[k] = self.mano_parameter_loss(pred.reshape(batch_size, -1), gt.reshape(batch_size, -1), has_gt)
 
         loss_vertices = pred_keypoints_3d.sum() * 0.0
-        if self.cfg.TRAIN.get('PAPER_MODE', False):
+        if (self.cfg.TRAIN.get('PAPER_MODE', False)
+                and not self.cfg.TRAIN.get('OFFICIAL_LOSSES', False)):
             loss_vertices = self.compute_vertex_loss(batch, output)
 
         loss = self.cfg.LOSS_WEIGHTS.get('VERTICES_3D', 0.0) * loss_vertices+\
@@ -275,7 +279,8 @@ class WiLoR(pl.LightningModule):
 
         # Sum coordinates per sample, then average the batch. This reduction is
         # an explicit implementation choice; the paper does not specify it.
-        if self.cfg.TRAIN.get('PAPER_MODE', False):
+        if (self.cfg.TRAIN.get('PAPER_MODE', False)
+                and not self.cfg.TRAIN.get('OFFICIAL_LOSSES', False)):
             loss = loss / batch_size
 
         losses = dict(loss=loss.detach(),
@@ -286,7 +291,8 @@ class WiLoR(pl.LightningModule):
         for k, v in loss_mano_params.items():
             losses['loss_' + k] = v.detach()
 
-        if self.cfg.TRAIN.get('PAPER_MODE', False):
+        if (self.cfg.TRAIN.get('PAPER_MODE', False)
+                and not self.cfg.TRAIN.get('OFFICIAL_LOSSES', False)):
             for name in losses:
                 if name != 'loss':
                     losses[name] = losses[name] / batch_size
@@ -442,9 +448,16 @@ class WiLoR(pl.LightningModule):
         output = self.forward_step(batch, train=True)
         pred_mano_params = output['pred_mano_params']
         loss = self.compute_loss(batch, output, train=True)
+        # Official supervised losses sum samples; DDP averages ranks. Preserve
+        # the 8-rank x 128 reference scale when changing per-rank batch size.
+        # Adversarial losses already average samples and are not rescaled.
+        if self.cfg.TRAIN.get('OFFICIAL_LOSSES', False):
+            reference_batch = self.cfg.TRAIN.get('REFERENCE_PER_RANK_BATCH_SIZE', batch_size)
+            loss = loss * (reference_batch / batch_size)
         if self.cfg.LOSS_WEIGHTS.ADVERSARIAL > 0:
             disc_out = self.discriminator(pred_mano_params['hand_pose'].reshape(batch_size, -1), pred_mano_params['betas'].reshape(batch_size, -1))
-            if self.cfg.MODEL.get('PAPER_LITERAL', False):
+            if (self.cfg.MODEL.get('PAPER_LITERAL', False)
+                    and not self.cfg.TRAIN.get('OFFICIAL_LOSSES', False)):
                 # Eq. (8) specifies an unsquared L2 norm for each example.
                 loss_adv = torch.linalg.vector_norm(disc_out.float() - 1.0, dim=-1).mean()
             else:
@@ -468,7 +481,8 @@ class WiLoR(pl.LightningModule):
             output['losses']['loss_gen'] = loss_adv
             output['losses']['loss_disc'] = loss_disc
 
-        if self.global_step > 0 and self.global_step % self.cfg.GENERAL.LOG_STEPS == 0:
+        if (self.cfg.GENERAL.get('ENABLE_VISUALIZATION', True)
+                and self.global_step > 0 and self.global_step % self.cfg.GENERAL.LOG_STEPS == 0):
             self.tensorboard_logging(batch, output, self.global_step, train=True)
 
         self.log('train/loss', output['losses']['loss'], on_step=True, on_epoch=True,
@@ -499,7 +513,8 @@ class WiLoR(pl.LightningModule):
             batch_size=batch['img'].shape[0],
             sync_dist=True,
         )
-        self.tensorboard_logging(batch, output, self.global_step, train=False)
+        if self.cfg.GENERAL.get('ENABLE_VISUALIZATION', True):
+            self.tensorboard_logging(batch, output, self.global_step, train=False)
 
         return output
 
@@ -520,7 +535,7 @@ class WiLoR(pl.LightningModule):
         # precision.
         with torch.autocast(device_type=pred_joints.device.type, enabled=False):
             pa_mpjpe_mm = 1000.0 * reconstruction_error(pred_joints, gt_joints).mean()
-            if self.cfg.MODEL.get('PAPER_LITERAL', False):
+            if self.cfg.get('EVAL', {}).get('FREIHAND_PROTOCOL', True):
                 pa_mpjpe_mm = 1000 * torch.linalg.vector_norm(
                     align_freihand(pred_joints, gt_joints) - gt_joints, dim=-1).mean()
 
@@ -558,7 +573,7 @@ class WiLoR(pl.LightningModule):
                 pred_vertices[has_mano] - gt_vertices[has_mano], dim=-1
             ).mean()
             metrics['val/pve_mm'] = pve_mm
-            if self.cfg.MODEL.get('PAPER_LITERAL', False):
+            if self.cfg.get('EVAL', {}).get('FREIHAND_PROTOCOL', True):
                 with torch.autocast(device_type=pred_vertices.device.type, enabled=False):
                     metrics.update({f'val/{k}': v for k, v in mesh_metrics(
                         pred_vertices[has_mano], gt_vertices[has_mano]).items()})

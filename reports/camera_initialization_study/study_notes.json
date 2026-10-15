@@ -1,0 +1,17 @@
+{
+  "started_utc": "2026-10-14 22:56:39",
+  "deadline_utc": "2026-10-14 23:16:39",
+  "git_commit_at_start": "6f4498fa197f4010c475e6566dcbd43c0ea2e90d",
+  "pose_mean_fix": {
+    "problem": "First two rotation columns were interleaved when serialized; rot6d_to_rotmat expects each full column consecutively.",
+    "fix": "transpose(1, 2) before flattening; assert decoder roundtrip; regenerate mean asset.",
+    "tests": "scripts/test_paper_literal.py passed including random rotation roundtrips.",
+    "excluded_experiments": [
+      "evaluation/camera_initialization_20261014 (network pilot only; raw GT geometry audit unaffected)",
+      "evaluation/camera_initialization_1000steps_20261014 (interrupted)"
+    ]
+  },
+  "main_experiment": "evaluation/camera_initialization_corrected_20261014",
+  "production_camera_configuration_changed": false,
+  "changes_pushed_to_remote": false
+}

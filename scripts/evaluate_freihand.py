@@ -13,9 +13,10 @@ from wilor.models import WiLoR
 from wilor.utils.mesh_renderer import MeshRenderer
 from wilor.utils.render_openpose import render_openpose
 
-METRICS = ["val/mpjpe_mm", "val/pa_mpjpe_mm", "val/pve_mm", "val/reprojection_px"]
+METRICS = ["val/mpjpe_mm", "val/pa_mpjpe_mm", "val/pve_mm", "val/reprojection_px", "val/pa_mpvpe_mm", "val/f_at_5mm", "val/f_at_15mm"]
 LABELS = {"val/mpjpe_mm":"MPJPE (mm)", "val/pa_mpjpe_mm":"PA-MPJPE (mm)",
-          "val/pve_mm":"PVE (mm)", "val/reprojection_px":"Reprojection (px)"}
+          "val/pve_mm":"PVE (mm)", "val/reprojection_px":"Reprojection (px)",
+          "val/pa_mpvpe_mm":"PA-MPVPE (mm)", "val/f_at_5mm":"F@5mm", "val/f_at_15mm":"F@15mm"}
 
 def move(value, device):
     if torch.is_tensor(value): return value.to(device, non_blocking=True)
@@ -26,7 +27,7 @@ def build_cfg(batch_size, workers):
     config_dir = str((Path(__file__).resolve().parents[1] / "configs_hydra").resolve())
     with initialize_config_dir(version_base="1.2", config_dir=config_dir):
         return compose(config_name="train.yaml", overrides=["data=freihand_full",
-            "experiment=wilor_freihand_full", "MODEL.BACKBONE.PRETRAINED_WEIGHTS=null",
+            "experiment=wilor_paper",
             f"TRAIN.BATCH_SIZE={batch_size}", f"GENERAL.NUM_WORKERS={workers}"])
 
 def make_loader(cfg):
@@ -35,12 +36,22 @@ def make_loader(cfg):
                                        drop_last=False, num_workers=cfg.GENERAL.NUM_WORKERS)
 
 def load_model(cfg, path, device):
-    model = WiLoR(cfg, init_renderer=False)
-    if path is not None:
-        checkpoint = torch.load(path, map_location="cpu", weights_only=False)
-        incompatible = model.load_state_dict(checkpoint.get("state_dict", checkpoint), strict=False)
-        if incompatible.missing_keys or incompatible.unexpected_keys:
-            print(f"[{path}] missing={incompatible.missing_keys} unexpected={incompatible.unexpected_keys}")
+    from omegaconf import OmegaConf
+    checkpoint = torch.load(path, map_location="cpu", weights_only=False, mmap=True) if path else None
+    model_cfg = OmegaConf.create(OmegaConf.to_container(cfg, resolve=False))
+    if checkpoint is not None:
+        saved_cfg = checkpoint.get("hyper_parameters", {}).get("cfg")
+        if saved_cfg is not None:
+            model_cfg = OmegaConf.create(OmegaConf.to_container(saved_cfg, resolve=False) if OmegaConf.is_config(saved_cfg) else (saved_cfg.dump() if hasattr(saved_cfg, "dump") else saved_cfg))
+        OmegaConf.set_struct(model_cfg, False)
+        state = checkpoint.get("state_dict", checkpoint)
+        # Recover token architecture even for older official checkpoints.
+        model_cfg.MODEL.NUM_POSE_TOKENS = 16 if state['backbone.pose_emb.weight'].shape[1] == 6 else 1
+        model_cfg.MODEL.BACKBONE.PRETRAINED_WEIGHTS = None
+        model_cfg.TRAIN.PAPER_MODE = False  # Encoder comes from the complete checkpoint.
+    model = WiLoR(model_cfg, init_renderer=False)
+    if checkpoint is not None:
+        model.load_state_dict(state, strict=True)
     return model.to(device).eval()
 
 def denormalize(images, cfg):
@@ -111,12 +122,12 @@ def write_reports(results, out_dir):
         writer=csv.DictWriter(f,fieldnames=fields,extrasaction="ignore"); writer.writeheader(); writer.writerows(results)
     (out_dir/"metrics.json").write_text(json.dumps(results,indent=2)+"\n")
     headers=["Model","Samples",*[LABELS[k] for k in METRICS]]
-    lines=["# FreiHAND validation comparison","","| "+" | ".join(headers)+" |",
+    lines=["# FreiHAND internal grouped-holdout comparison","","| "+" | ".join(headers)+" |",
            "| "+" | ".join(["---"]*len(headers))+" |"]
     for result in results:
         values=[result["model"],str(result["samples"]),*[f'{result[k]:.3f}' if k in result else "N/A" for k in METRICS]]
         lines.append("| "+" | ".join(values)+" |")
-    lines += ["","Lower is better for every metric.",""]
+    lines += ["","Lower errors are better; higher F-scores are better. Internal grouped holdout, not the official 3960-image benchmark.",""]
     (out_dir/"report.md").write_text("\n".join(lines))
 
 def main():
@@ -126,7 +137,7 @@ def main():
     p.add_argument("--output-dir",default="evaluation/freihand_comparison")
     p.add_argument("--batch-size",type=int,default=16); p.add_argument("--workers",type=int,default=4)
     p.add_argument("--device",default="cuda"); p.add_argument("--precision",choices=["bf16","fp16","fp32"],default="bf16")
-    p.add_argument("--max-batches",type=int,default=None,help="Debug limit; omit for all 10,240 samples")
+    p.add_argument("--max-batches",type=int,default=None,help="Debug limit; omit for the complete grouped holdout")
     p.add_argument("--visual-samples",type=int,nargs="*",default=[0,511,2047,4095,8191])
     p.add_argument("--log-every",type=int,default=50); p.add_argument("--seed",type=int,default=42); args=p.parse_args()
     out_dir=Path(args.output_dir); out_dir.mkdir(parents=True,exist_ok=True); cfg=build_cfg(args.batch_size,args.workers)

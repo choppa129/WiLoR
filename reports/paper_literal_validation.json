@@ -1,5 +1,5 @@
 {
-  "status": "passed",
+  "status": "historical_smoke_pass_before_pose_mean_encoding_fix",
   "scope": "Paper-explicit reconstruction changes, FreiHAND-only; short training validation, not an accuracy reproduction",
   "sources": {
     "paper": "https://arxiv.org/html/2409.12259v2",
@@ -201,5 +201,8 @@
     "Validation uses grouped FreiHAND holdout and MANO-decoded vertex targets, not the official held-out benchmark.",
     "Smoke DDP uses two GPUs and small batches; eight-rank full-batch sampling is audited without launching 1000-epoch training.",
     "Old 16-pose-token reconstruction checkpoints cannot resume the new 1-pose-token model. ViTPose encoder weights remain compatible."
+  ],
+  "subsequent_findings": [
+    "The fitted pose mean was stored in interleaved-column order but the official decoder expects concatenated columns. Fixed in scripts/prepare_paper_mean_params.py and covered by rotation roundtrip assertions. The prior smoke tests demonstrated execution, not correct mean initialization or convergence."
   ]
 }

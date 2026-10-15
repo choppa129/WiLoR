@@ -1,0 +1,119 @@
+{
+  "scope": "FreiHAND-only WiLoR reconstruction; official-code precedence for implemented components",
+  "sources": {
+    "wilor_config": "https://github.com/rolpotamias/WiLoR/blob/fcb911312a38fa8badd30d9656a167485d61b8f9/pretrained_models/model_config.yaml",
+    "paper": "https://arxiv.org/html/2409.12259v2",
+    "batch_reply": "https://github.com/rolpotamias/WiLoR/issues/19#issuecomment-2888436633",
+    "fh_eval": "https://github.com/lmb-freiburg/freihand",
+    "hamer_eval": "https://github.com/geopavlakos/hamer/blob/main/eval.py"
+  },
+  "correction": "Official checkpoint config DOES publish all 14 mixture weights and augmentation magnitudes. Earlier claims these are unpublished were incorrect.",
+  "official_sampling_weights": {
+    "FREIHAND": 0.2,
+    "INTERHAND26M": 0.1,
+    "MTC": 0.05,
+    "RHD": 0.05,
+    "COCOW": 0.05,
+    "HALPE": 0.05,
+    "MPIINZSL": 0.05,
+    "HO3D": 0.05,
+    "H2O3D": 0.05,
+    "DEX": 0.05,
+    "BEDLAM": 0.05,
+    "REINTER": 0.1,
+    "HOT3D": 0.05,
+    "ARCTIC": 0.1
+  },
+  "data": {
+    "wilor_utils_byte_identical": true,
+    "hamer_tar_processing_ast_identical": true,
+    "train": 117216,
+    "holdout": 13024,
+    "grouping": "original capture ID modulo 32560; all four variants in same split; seed42",
+    "all_train_prior_labels_available": 117216,
+    "remaining_unknown": "WiLoR original raw-to-unified-label conversion scripts and exact epoch construction are not released",
+    "prior": "sample independently from training-only FreiHAND poses/shapes; avoid holdout leakage",
+    "betas_reg": "false locally; official true has no effect on fully annotated FreiHAND samples",
+    "augmentation": {
+      "scale_factor": 0.3,
+      "rotation_factor_degrees": 30,
+      "rotation_probability": 0.6,
+      "color_factor": 0.2,
+      "translation_factor": 0.02,
+      "translation_note": "Official config TRANS_AUG_RATE=.5 is unused by official do_augmentation; x/y offsets are drawn every augmented sample. Keep official behavior.",
+      "random_flip": false,
+      "extreme_crop_probability": 0
+    }
+  },
+  "training": {
+    "profile": "experiment=wilor_b200_2gpu",
+    "gpu_count": 2,
+    "batch_per_gpu": 512,
+    "effective_batch": 1024,
+    "gradient_accumulation": false,
+    "activation_checkpointing": true,
+    "precision": "32-true",
+    "epochs": 1000,
+    "updates_per_epoch": 114,
+    "generator_updates_total": 114000,
+    "images_per_epoch": 116736,
+    "dropped_per_epoch": 480,
+    "optimizer": "AdamW (official code; paper says Adam)",
+    "lr": 1e-05,
+    "weight_decay": 0.0001,
+    "scheduler": null,
+    "reference_per_rank_batch": 128,
+    "supervised_backward_scale": 0.25,
+    "reason": "Keep official batch-summed supervised gradient / DDP rank average invariant relative to 8x128; mean adversarial losses unscaled",
+    "refinenet_in_optimizer": true,
+    "refinenet_note": "Released get_parameters only lists backbone; local includes RefineNet so the stated learned refinement is actually trained. Not copied literally.",
+    "smoke": "2x512, one real batch + validation succeeded; resume succeeded; both optimizer step counts=2 after resume",
+    "full_training_started": false
+  },
+  "evaluation": {
+    "online": "internal grouped holdout, PA joint/vertex errors and aligned mesh F@5/F@15; extra raw metrics diagnostic only",
+    "benchmark": "3960 official samples with official ground-truth joints and vertices",
+    "metadata": "HaMeR official freihand_val.npz; fixed center and bbox, no test labels used as network input",
+    "crop": "BBOX_SHAPE=[192,256], rescale_factor=-1, WiLoR get_example",
+    "scorer": "Pinned unmodified official FreiHAND metric function bodies; cKDTree replaces obsolete Open3D nearest-neighbor API",
+    "metric_test": "PA joints/vertices and F-scores agree with online torch metrics",
+    "unknown": "WiLoR exact benchmark preprocessing/checkpoint selection not published; upstream HaMeR eval pipeline used",
+    "official_weight_benchmark_result": {
+      "samples": 3960,
+      "pa_mpjpe_mm": 5.709969183680978,
+      "pa_mpvpe_mm": 5.272528528107507,
+      "f_at_5mm": 0.813852287760509,
+      "f_at_15mm": 0.9916781529831423,
+      "auc_j": 0.8862370700754538,
+      "auc_v": 0.894867714891377,
+      "checkpoint": "pretrained_models/wilor_final.ckpt",
+      "protocol": "FreiHAND official 3960 evaluation samples",
+      "input_processing": "HaMeR official eval metadata; WiLoR crop tools; BBOX_SHAPE=[192,256]",
+      "caveat": "WiLoR does not publish a benchmark entrypoint; exact original eval preprocessing is not confirmed"
+    },
+    "paper_full_data_result": {
+      "pa_mpjpe_mm": 5.5,
+      "pa_mpvpe_mm": 5.1,
+      "f_at_5mm": 0.825,
+      "f_at_15mm": 0.993
+    },
+    "paper_freihand_only_ablation": {
+      "pa_mpjpe_mm": 6.1,
+      "pa_mpvpe_mm": 5.8,
+      "f_at_5mm": 0.793,
+      "f_at_15mm": 0.99
+    },
+    "unresolved_result_gap": "Official released checkpoint with upstream preprocessing is close but not identical to the paper. Do not infer exact preprocessing/checkpoint equality."
+  },
+  "published_recipe_conflicts": [
+    "Paper: Adam; code: AdamW. Use code.",
+    "Paper: 1000 epochs; shipped config TOTAL_STEPS=1000000; author: batch1024, shipped per-rank batch32. Use paper epochs and author effective batch; original epoch size remains unknown."
+  ],
+  "local_choices": [
+    "FP32 and seed42",
+    "Finite shuffled epochs and grouped10%holdout",
+    "Training-only discriminator prior, one prior per image",
+    "Include RefineNet optimizer parameters",
+    "Checkpoint/log intervals use Lightning optimizer-step counter; generator and discriminator each increment it"
+  ]
+}

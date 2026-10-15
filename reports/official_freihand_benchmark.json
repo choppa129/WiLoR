@@ -1,0 +1,13 @@
+{
+  "samples": 3960,
+  "pa_mpjpe_mm": 5.709969183680978,
+  "pa_mpvpe_mm": 5.272528528107507,
+  "f_at_5mm": 0.813852287760509,
+  "f_at_15mm": 0.9916781529831423,
+  "auc_j": 0.8862370700754538,
+  "auc_v": 0.894867714891377,
+  "checkpoint": "pretrained_models/wilor_final.ckpt",
+  "protocol": "FreiHAND official 3960 evaluation samples",
+  "input_processing": "HaMeR official eval metadata; WiLoR crop tools; BBOX_SHAPE=[192,256]",
+  "caveat": "WiLoR does not publish a benchmark entrypoint; exact original eval preprocessing is not confirmed"
+}

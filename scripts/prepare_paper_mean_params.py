@@ -21,7 +21,14 @@ sys.path.insert(0, str(ROOT))
 from wilor.configs import dataset_config
 from wilor.datasets.finite_freihand import FiniteFreiHAND
 from wilor.models import MANO
-from wilor.utils.geometry import aa_to_rotmat
+from wilor.utils.geometry import aa_to_rotmat, rot6d_to_rotmat
+
+
+def encode_rotation_mean(rotations):
+    """Store the first two rotation columns consecutively, as the decoder expects."""
+    pose = rotations[:, :, :2].transpose(1, 2).reshape(-1)
+    torch.testing.assert_close(rot6d_to_rotmat(pose), rotations, atol=1e-6, rtol=1e-5)
+    return pose
 
 
 def main():
@@ -79,13 +86,15 @@ def main():
     mean_rot = aa_to_rotmat(torch.tensor(pose_mean).float().reshape(-1,3))
     destination = Path(cfg.MANO.MEAN_PARAMS)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    np.savez(destination, pose=mean_rot[:, :, :2].reshape(96).numpy(),
+    np.savez(destination, pose=encode_rotation_mean(mean_rot).numpy(),
              shape=np.concatenate(shapes).mean(0).astype(np.float32),
              cam=camera_mean)
     provenance = {'training_examples':len(dataset), 'rejected_camera_fits':rejected,
                   'seed':cfg.seed, 'holdout':cfg.DATASETS.FREIHAND_HOLDOUT,
                   'training_ids_sha256':hashlib.sha256('\n'.join(e[1] for e in dataset.entries).encode()).hexdigest(),
-                  'method':__doc__, 'mean_camera':np.concatenate(cameras).mean(0).tolist()}
+                  'method':__doc__, 'mean_camera':camera_mean.tolist(),
+                  'pose_encoding':'first two rotation columns concatenated (column-major 6D)',
+                  'pose_rotation_roundtrip_checked':True}
     destination.with_suffix('.json').write_text(json.dumps(provenance,indent=2)+'\n')
     print(json.dumps(provenance,indent=2))
 

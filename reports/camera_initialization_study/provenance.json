@@ -1,0 +1,28 @@
+{
+  "archive": "hamer_official/hamer_demo_data.tar.gz",
+  "archive_member": "_DATA/data/mano_mean_params.npz",
+  "member_mtime": 1702243482,
+  "sha256": "efc0ec58e4a5cef78f3abfb4e8f91623b8950be9eff8b8e0dbb0d036ebc63988",
+  "matches_wilor_file": true,
+  "author_download_url": "https://www.cs.utexas.edu/~pavlakos/hamer/data/hamer_demo_data.tar.gz",
+  "verification": "Extracted directly from previously downloaded HaMeR archive; network re-fetch limited to 20MB and target follows large checkpoint.",
+  "wilor_url": "https://raw.githubusercontent.com/rolpotamias/WiLoR/main/mano_data/mano_mean_params.npz",
+  "wilor_remote_sha256": "efc0ec58e4a5cef78f3abfb4e8f91623b8950be9eff8b8e0dbb0d036ebc63988",
+  "remote_wilor_matches_archive": true,
+  "official_checkpoint": {
+    "checkpoint": "pretrained_models/wilor_final.ckpt",
+    "camera_buffers": {
+      "backbone.init_cam": [
+        [
+          4.0,
+          0.0,
+          0.0
+        ]
+      ]
+    }
+  },
+  "author_training_reference": "https://github.com/rolpotamias/WiLoR/issues/20#issuecomment-2514445435",
+  "unanswered_mean_question": "https://github.com/rolpotamias/WiLoR/issues/47",
+  "hypothesis": "WiLoR likely reused the HaMeR initialization asset (or the same upstream asset), rather than recomputing all means from its expanded dataset mixture. The original derivation of scale=4 remains unknown.",
+  "evidence_limits": "Archive previously downloaded locally. Online WiLoR mean file independently re-fetched and matched. No author confirmation of original camera-mean computation."
+}

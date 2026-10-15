@@ -1,0 +1,22 @@
+{
+  "official_commit": "fcb911312a38fa8badd30d9656a167485d61b8f9",
+  "token_test": [
+    [
+      2,
+      210,
+      32
+    ]
+  ],
+  "camera_initialization": [
+    4.0,
+    0.0,
+    0.0
+  ],
+  "pretrained_path": "hamer_training_data/vitpose_backbone.pth",
+  "encoder_keys_shapes_checked": 389,
+  "supervised_loss_and_gradients": "exact match to official compute_loss on masked synthetic batch",
+  "losses_py_and_discriminator_py": "identical to official source",
+  "projection": "perspective; official depth conversion, per-scale perspective projection, align_corners=True bilinear sampling and max pooling",
+  "training_started": false,
+  "projection_validation": "Small-channel RefineNet outputs and input gradients exactly match pinned official module on synthetic inputs; perspective projection outputs exactly match"
+}

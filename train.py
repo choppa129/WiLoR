@@ -49,8 +49,8 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
     if cfg.TRAIN.get('PAPER_MODE', False):
         if cfg.MODEL.get('PAPER_LITERAL', False) and not Path(cfg.MANO.MEAN_PARAMS).is_file():
             raise FileNotFoundError(
-                'Training-set initialization is missing. Run '
-                '`python scripts/prepare_paper_mean_params.py --device cuda` first.'
+                f'Configured MANO initialization file is missing: {cfg.MANO.MEAN_PARAMS}. '
+                'Restore that file before training.'
             )
         # The paper does not specify the sampling policy / epoch length.
         # Do not silently call the legacy 100,000-sample worker stream an epoch.
@@ -64,7 +64,7 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
             )
         log.warning(
             'Paper mode: 1000 epochs. FreiHAND-only finite sampling is a local '
-            'adaptation, not the unpublished original 14-dataset sampling schedule. '
+            'adaptation; official mixture weights are published, but epoch length is not. '
             'Author reference: 8 GPUs, effective batch 1024 (GitHub issue #19).'
         )
 
@@ -78,7 +78,8 @@ def train(cfg: DictConfig) -> Tuple[dict, dict]:
     datamodule = WiLoRDataModule(cfg, dataset_cfg)
 
     # Setup model
-    model = WiLoR(cfg, init_renderer=cfg.MODEL.get('PROJECTION', 'perspective') != 'weak_perspective')
+    model = WiLoR(cfg, init_renderer=(cfg.GENERAL.get('ENABLE_VISUALIZATION', True)
+                                    and cfg.MODEL.get('PROJECTION', 'perspective') != 'weak_perspective'))
 
     # Setup Tensorboard logger
     logger = TensorBoardLogger(os.path.join(cfg.paths.output_dir, 'tensorboard'), name='', version='', default_hp_metric=False)

@@ -17,7 +17,7 @@ def vit(cfg):
                 depth=32,
                 num_heads=16,
                 ratio=1,
-                use_checkpoint=False,
+                use_checkpoint=cfg.MODEL.BACKBONE.get('USE_CHECKPOINT', False),
                 mlp_ratio=4,
                 qkv_bias=True,
                 drop_path_rate=0.55,
@@ -249,7 +249,11 @@ class ViT(nn.Module):
         self.register_buffer('init_hand_pose', init_hand_pose)
         self.register_buffer('init_betas', init_betas)
         
-        self.num_pose_tokens = 1 if cfg.MODEL.get('PAPER_LITERAL', False) else cfg.MANO.NUM_HAND_JOINTS + 1
+        self.num_pose_tokens = cfg.MODEL.get(
+            'NUM_POSE_TOKENS',
+            1 if cfg.MODEL.get('PAPER_LITERAL', False) else cfg.MANO.NUM_HAND_JOINTS + 1)
+        if self.num_pose_tokens not in (1, cfg.MANO.NUM_HAND_JOINTS + 1):
+            raise ValueError('NUM_POSE_TOKENS must be 1 or NUM_HAND_JOINTS + 1')
         self.pose_emb = nn.Linear(npose if self.num_pose_tokens == 1 else self.joint_rep_dim, embed_dim)
         self.shape_emb = nn.Linear(10  , embed_dim)
         self.cam_emb   = nn.Linear(3 , embed_dim)
@@ -365,7 +369,7 @@ class ViT(nn.Module):
             if self.skip_blocks and i in self.blocks_to_skip[:5]:
                 continue 
             if self.use_checkpoint:
-                x = checkpoint.checkpoint(blk, x)
+                x = checkpoint.checkpoint(blk, x, use_reentrant=False)
             else:
                 x = blk(x)
 

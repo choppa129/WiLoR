@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from wilor.utils.geometry import rotmat_to_axis_angle
 from wilor.utils.freihand_metrics import align_freihand, mesh_metrics
 from wilor.models.backbones.vit import ViT
+from scripts.prepare_paper_mean_params import encode_rotation_mean
 
 torch.set_num_threads(2)
 torch.manual_seed(42)
@@ -20,6 +21,8 @@ rotations = Rotation.random(100, random_state=42)
 matrix = torch.tensor(rotations.as_matrix(), dtype=torch.double, requires_grad=True)
 np.testing.assert_allclose(rotmat_to_axis_angle(matrix).detach(), rotations.as_rotvec(), atol=1e-12)
 assert torch.autograd.gradcheck(rotmat_to_axis_angle, (matrix[:3],))
+from wilor.utils.geometry import rot6d_to_rotmat
+torch.testing.assert_close(rot6d_to_rotmat(encode_rotation_mean(matrix.detach())), matrix.detach())
 for angle in [0., 1e-10, np.pi-1e-7, np.pi]:
     r = torch.tensor(Rotation.from_rotvec([angle,0,0]).as_matrix(), requires_grad=True)
     value = rotmat_to_axis_angle(r)
@@ -44,7 +47,7 @@ assert metrics['f_at_5mm'] == 1 and metrics['f_at_15mm'] == 1
 
 with tempfile.TemporaryDirectory() as tmp:
     path = str(Path(tmp)/'means.npz')
-    np.savez(path, pose=np.tile(np.eye(3)[:,:2].reshape(-1),16), shape=np.zeros(10), cam=[1.,0,0])
+    np.savez(path, pose=np.tile(np.eye(3)[:,:2].T.reshape(-1),16), shape=np.zeros(10), cam=[1.,0,0])
     cfg = OmegaConf.create({'MODEL':{'PAPER_LITERAL':True,'MANO_HEAD':{}},
                             'MANO':{'NUM_HAND_JOINTS':15,'MEAN_PARAMS':path}})
     model = ViT(img_size=(256,192), embed_dim=32, depth=1, num_heads=4, cfg=cfg)

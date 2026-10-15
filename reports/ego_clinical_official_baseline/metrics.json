@@ -1,0 +1,62 @@
+{
+  "checkpoint": "/data/xjiang390/projects/WiLoR/pretrained_models/wilor_final.ckpt",
+  "checkpoint_sha256": "3e97aafc7dd08d883a4cc5a027df61fdb6fda6136dbd1319405413862ada6bb2",
+  "validation_npz_sha256": "cd296cfcf6b3651830437954b55e4d86ee69ee8ce515a38cda012ab5e27cfbc0",
+  "source_revision": "9c75f8ad6c7c560711f3da1e6e8a9b130e1e54e1",
+  "device": "NVIDIA B200",
+  "precision": "float32",
+  "seconds": 6.423813104629517,
+  "overall": {
+    "samples": 372,
+    "mpjpe_mm": 25.62067218877936,
+    "pa_mpjpe_mm": 7.629546126945164,
+    "reprojection_crop_px": 15.67722064128486
+  },
+  "by_hand": {
+    "left": {
+      "samples": 159,
+      "mpjpe_mm": 24.81308378063658,
+      "pa_mpjpe_mm": 8.128691356973967,
+      "reprojection_crop_px": 16.864810646704907
+    },
+    "right": {
+      "samples": 213,
+      "mpjpe_mm": 26.223519873731014,
+      "pa_mpjpe_mm": 7.256944758050425,
+      "reprojection_crop_px": 14.790709792168487
+    }
+  },
+  "by_session": {
+    "session_017": {
+      "samples": 174,
+      "mpjpe_mm": 26.879702647527058,
+      "pa_mpjpe_mm": 7.855115159957434,
+      "reprojection_crop_px": 16.724390416309753
+    },
+    "session_019": {
+      "samples": 124,
+      "mpjpe_mm": 21.67764131484493,
+      "pa_mpjpe_mm": 6.989382963760879,
+      "reprojection_crop_px": 12.881407005171623
+    },
+    "session_024": {
+      "samples": 74,
+      "mpjpe_mm": 29.267490142100566,
+      "pa_mpjpe_mm": 8.17185991736025,
+      "reprojection_crop_px": 17.89983347944311
+    }
+  },
+  "protocol": {
+    "mpjpe": "Mean over all 21 joints after wrist translation alignment, mm. No rotation or scale alignment.",
+    "pa_mpjpe": "Per-sample similarity Procrustes alignment with proper rotation, positive scale and translation, then mean over 21 joints, mm.",
+    "reprojection": "Mean over in-frame reference joints in 256px crop.",
+    "crop": "Reference MANO-derived box, padding 1.25, rescale_factor=1, no augmentation; left canonicalized by existing loader.",
+    "limits": "Reference-based hand reconstruction, not end-to-end detection. Reference keypoints are fitted MANO, not independent ground truth. Left model asymmetry remains. Test split not evaluated."
+  },
+  "mpjpe_distribution": {
+    "median_mm": 19.820189476013184,
+    "p90_mm": 35.26714744567872,
+    "max_mm": 176.340576171875,
+    "samples_over_50mm": 18
+  }
+}

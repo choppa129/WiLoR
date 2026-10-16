@@ -1,144 +1,87 @@
 {
   "metrics": {
     "all_available": {
-      "reference_tight": {
-        "official": {
-          "samples": 384,
-          "mpjpe_mm": 22.025206671406824,
-          "pa_mpjpe_mm": 8.167138916982283,
-          "demo_original_px": 39.27242710937121,
-          "direct_original_px": 39.674479365348816,
-          "centered_2d_px": 30.895045971137762,
-          "wrist_px": 32.8549613464533,
-          "span_ratio": 0.8869803889546525,
-          "camera_vs_direct_px": 1.690781980493517,
-          "box_size_px": 772.2196424802145
-        },
-        "finetuned": {
-          "samples": 384,
-          "mpjpe_mm": 9.76059209741652,
-          "pa_mpjpe_mm": 5.34550209840756,
-          "demo_original_px": 25.631082922774368,
-          "direct_original_px": 25.74704459309578,
-          "centered_2d_px": 22.404126994075202,
-          "wrist_px": 46.75651443905286,
-          "span_ratio": 0.9136661499153297,
-          "camera_vs_direct_px": 2.2133871455779244,
-          "box_size_px": 772.2196424802145
-        }
-      },
       "detector_tight": {
         "official": {
-          "samples": 351,
-          "mpjpe_mm": 20.144047136659974,
-          "pa_mpjpe_mm": 8.183642013865931,
-          "demo_original_px": 35.32053370012401,
-          "direct_original_px": 35.63309899354592,
-          "centered_2d_px": 28.272071888340026,
-          "wrist_px": 28.702489132981295,
-          "span_ratio": 0.9257171744410155,
-          "camera_vs_direct_px": 1.7030666574874158,
-          "box_size_px": 948.9565527065527
+          "samples": 488,
+          "mpjpe_mm": 20.406105871083305,
+          "pa_mpjpe_mm": 7.614756173845442,
+          "demo_original_px": 30.44842531828666,
+          "direct_original_px": 30.4688179629748,
+          "centered_2d_px": 22.767576317346162,
+          "wrist_px": 23.284352772978295,
+          "span_ratio": 0.9620850210935528,
+          "camera_vs_direct_px": 1.5882538359298783,
+          "box_size_px": 965.6045064457128
         },
         "finetuned": {
-          "samples": 351,
-          "mpjpe_mm": 9.774017262662579,
-          "pa_mpjpe_mm": 5.546202554681866,
-          "demo_original_px": 26.43923920623074,
-          "direct_original_px": 26.4106959141897,
-          "centered_2d_px": 22.437964439646393,
-          "wrist_px": 44.78464191782828,
-          "span_ratio": 0.9286790101638193,
-          "camera_vs_direct_px": 2.0443726811711396,
-          "box_size_px": 948.9565527065527
+          "samples": 488,
+          "mpjpe_mm": 7.936143182828778,
+          "pa_mpjpe_mm": 4.524282478430842,
+          "demo_original_px": 23.689146834608273,
+          "direct_original_px": 23.988351686078992,
+          "centered_2d_px": 20.40457438790989,
+          "wrist_px": 32.61326109213584,
+          "span_ratio": 0.9727347407017992,
+          "camera_vs_direct_px": 1.7400057806777058,
+          "box_size_px": 965.6045064457128
         }
       }
     },
     "common_matched": {
-      "reference_tight": {
-        "official": {
-          "samples": 351,
-          "mpjpe_mm": 21.766097532038675,
-          "pa_mpjpe_mm": 8.219948069480914,
-          "demo_original_px": 37.931584626993335,
-          "direct_original_px": 38.33450563273199,
-          "centered_2d_px": 29.765281017177198,
-          "wrist_px": 31.87367493929708,
-          "span_ratio": 0.8904892923005961,
-          "camera_vs_direct_px": 1.686798575265772,
-          "box_size_px": 766.2125442374465
-        },
-        "finetuned": {
-          "samples": 351,
-          "mpjpe_mm": 9.759238641825837,
-          "pa_mpjpe_mm": 5.438795181019976,
-          "demo_original_px": 25.587216119699683,
-          "direct_original_px": 25.687333199373338,
-          "centered_2d_px": 22.325565569909365,
-          "wrist_px": 46.33138212056449,
-          "span_ratio": 0.9150907609969267,
-          "camera_vs_direct_px": 2.209757512248712,
-          "box_size_px": 766.2125442374465
-        }
-      },
       "detector_tight": {
         "official": {
-          "samples": 351,
-          "mpjpe_mm": 20.144047136659974,
-          "pa_mpjpe_mm": 8.183642013865931,
-          "demo_original_px": 35.32053370012401,
-          "direct_original_px": 35.63309899354592,
-          "centered_2d_px": 28.272071888340026,
-          "wrist_px": 28.702489132981295,
-          "span_ratio": 0.9257171744410155,
-          "camera_vs_direct_px": 1.7030666574874158,
-          "box_size_px": 948.9565527065527
+          "samples": 488,
+          "mpjpe_mm": 20.406105871083305,
+          "pa_mpjpe_mm": 7.614756173845442,
+          "demo_original_px": 30.44842531828666,
+          "direct_original_px": 30.4688179629748,
+          "centered_2d_px": 22.767576317346162,
+          "wrist_px": 23.284352772978295,
+          "span_ratio": 0.9620850210935528,
+          "camera_vs_direct_px": 1.5882538359298783,
+          "box_size_px": 965.6045064457128
         },
         "finetuned": {
-          "samples": 351,
-          "mpjpe_mm": 9.774017262662579,
-          "pa_mpjpe_mm": 5.546202554681866,
-          "demo_original_px": 26.43923920623074,
-          "direct_original_px": 26.4106959141897,
-          "centered_2d_px": 22.437964439646393,
-          "wrist_px": 44.78464191782828,
-          "span_ratio": 0.9286790101638193,
-          "camera_vs_direct_px": 2.0443726811711396,
-          "box_size_px": 948.9565527065527
+          "samples": 488,
+          "mpjpe_mm": 7.936143182828778,
+          "pa_mpjpe_mm": 4.524282478430842,
+          "demo_original_px": 23.689146834608273,
+          "direct_original_px": 23.988351686078992,
+          "centered_2d_px": 20.40457438790989,
+          "wrist_px": 32.61326109213584,
+          "span_ratio": 0.9727347407017992,
+          "camera_vs_direct_px": 1.7400057806777058,
+          "box_size_px": 965.6045064457128
         }
       }
     }
   },
   "protocol": {
     "sessions": [
-      "session_019",
-      "session_036"
+      "session_035",
+      "session_038"
     ],
-    "split": "validation only",
-    "eligible_samples": 384,
-    "common_matched_samples": 351,
+    "split": "test",
+    "eligible_samples": 517,
+    "common_matched_samples": 488,
     "settings": {
-      "reference_tight": [
-        "reference",
-        1.25,
-        null
-      ],
       "detector_tight": [
         "detector",
         1.25,
         null
       ]
     },
-    "gpu": 5,
+    "gpu": 0,
     "precision": "FP32, TF32 disabled",
     "video": "960x2160, four vertically stacked panels, stride 6 at 5fps; full source duration approximately preserved. Skeleton rendered with existing demo camera conversion. No smoothing.",
     "matching": "Same handedness and max box IoU >= 0.3; report common matched subset separately. Missed detections excluded from error means, not counted as successes.",
     "tight": "Square crop, pad 1.25",
-    "wide": "Pad 2.0 plus aspect-ratio expansion [192,256]",
-    "preprocessing": "All four conditions use identical ViTDetDataset antialiasing. Reference tight uses identical geometry to training; differs from original ImageDataset preprocessing/raw JPEG.",
+    "preprocessing": "Fixed detector tight crop policy, selected on validation; shared inputs for both models.",
     "limits": "Source MANO is fitted reference, not independently annotated truth. No claim of subject generalization. Validation has been used for checkpoint selection.",
     "official_sha256": "3e97aafc7dd08d883a4cc5a027df61fdb6fda6136dbd1319405413862ada6bb2",
     "finetuned_sha256": "da0ea67c0ba6308b8ad8800cfcba748e52bea1c687be49bade58a1ce7e1c2df9",
-    "val_sha256": "b1c2469b9888a04154c4c11ee1344009724278932e1ba46a0f1e2e062f4e972e"
+    "test_sha256": "eb64d75916533db4d282b43b4d7fa041979dea44f293a4d63e6c64ca94cf1abd",
+    "prior_test_access": "Earlier test results/videos were inspected before validation-only crop diagnosis; no claim of untouched test set."
   }
 }

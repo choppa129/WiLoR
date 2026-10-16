@@ -1,0 +1,40 @@
+{
+  "split": "test",
+  "metrics": {
+    "official": {
+      "samples": 488,
+      "mpjpe_mm": 20.406105871083305,
+      "pa_mpjpe_mm": 7.614756173845442,
+      "demo_original_px": 30.44842531828666,
+      "direct_original_px": 30.4688179629748,
+      "centered_2d_px": 22.767576317346162,
+      "wrist_px": 23.284352772978295,
+      "span_ratio": 0.9620850210935528,
+      "camera_vs_direct_px": 1.5882538359298783,
+      "box_size_px": 965.6045064457128
+    },
+    "finetuned": {
+      "samples": 488,
+      "mpjpe_mm": 7.936143182828778,
+      "pa_mpjpe_mm": 4.524282478430842,
+      "demo_original_px": 23.689146834608273,
+      "direct_original_px": 23.988351686078992,
+      "centered_2d_px": 20.40457438790989,
+      "wrist_px": 32.61326109213584,
+      "span_ratio": 0.9727347407017992,
+      "camera_vs_direct_px": 1.7400057806777058,
+      "box_size_px": 965.6045064457128
+    }
+  },
+  "matched": 488,
+  "eligible": 517,
+  "replaced_slides": [
+    2,
+    4,
+    5,
+    6,
+    7
+  ],
+  "training_validation_curve_slide": 3,
+  "no_training_or_selection_on_test": true
+}

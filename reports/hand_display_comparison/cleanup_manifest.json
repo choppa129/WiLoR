@@ -1,0 +1,248 @@
+{
+  "scope": "hand-display presentation and obsolete duplicate visualization outputs only",
+  "canonical_ppt": "reports/hand_display_comparison/WiLoR_手套微调_汇报.pptx",
+  "removed": [
+    {
+      "path": "reports/hand_display_comparison/WiLoR_手套微调_平均表现与案例对比.pptx",
+      "bytes": 2134960,
+      "sha256": "a9f8008809abef7582e73556043d1f2007c4120e972da65272930a13fb1393b3"
+    },
+    {
+      "path": "reports/hand_display_conclusions/WiLoR_手套微调_关键结论.pptx",
+      "bytes": 990720,
+      "sha256": "c9012bcc4cd8daacd5364fb7a37306a3048525c205c21e7ba1c26aaf22b2a548"
+    },
+    {
+      "path": "reports/hand_display_comparison/finetuned_worst_image_review.jpg",
+      "bytes": 531245,
+      "sha256": "aca78cdb3a991e094f444e49bd51fd231c4b86c7a314ae578f73c27ae01d0b84"
+    },
+    {
+      "path": "reports/hand_display_comparison/official_worst_image_review.jpg",
+      "bytes": 447480,
+      "sha256": "025a0f9424017d77c42c7e157438c75175f1eaaf136c55436da3a05949694204"
+    },
+    {
+      "path": "reports/hand_display_comparison/random10_image_review.jpg",
+      "bytes": 1190006,
+      "sha256": "0725c500c31d55460629e1743cb21584265c376d1df062acde6c95a62b255377"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/258_triplet.jpg",
+      "bytes": 121838,
+      "sha256": "be72205cf38f3715598bbc9862876c7b69319e63c94d667a873aa914176f8a43"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/178_triplet.jpg",
+      "bytes": 126410,
+      "sha256": "c39ca3335be3f2ccb2a79b06ecd8f360a53df166c363fc95c595911276fe4ea0"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/226_triplet.jpg",
+      "bytes": 130722,
+      "sha256": "834946620c6a1f8718d9a63a11b9326fbc471d7b9a74c578bd2d2c1120f7acfc"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/276_triplet.jpg",
+      "bytes": 126091,
+      "sha256": "bcd5197ea5386f39b6814842f2539d793628423e50790d8f35bb139bed791de6"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/123_triplet.jpg",
+      "bytes": 115400,
+      "sha256": "4d98a5396f2f8ec43bacab2113bfa083f89b12b79b8c63b8ca826072de1128cc"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/236_triplet.jpg",
+      "bytes": 130790,
+      "sha256": "3d0572e32a2860144b03d7a797970d15c6ef66d5537d8f2475f0819a94e9b846"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/298_triplet.jpg",
+      "bytes": 118704,
+      "sha256": "f15a1881ab9e753a8ee0a6774b244da2d27257aac2d712dd547201afde5cf254"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/330_triplet.jpg",
+      "bytes": 120204,
+      "sha256": "a080004dfc8b0f972414b701daf973013a5580864fb44aef005231563d15bc9e"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/287_triplet.jpg",
+      "bytes": 110749,
+      "sha256": "3e03ed936906d3a55a34ba2b88514b0326f1bc9a7deeb701dd1d8423dad02521"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/41_triplet.jpg",
+      "bytes": 108127,
+      "sha256": "84de4aaef488f1062ef6bc897fd269ea4bfe2f18bc7278f978e79f69e87cc87e"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/42_triplet.jpg",
+      "bytes": 114149,
+      "sha256": "703376b52f64b74d62f26367934088b8cdb5e1c35e7e3a070e497ac0f68190df"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/212_triplet.jpg",
+      "bytes": 131545,
+      "sha256": "ea0c3a25c487725cfdf220e3310979004ea31456358c3842f476ee9e6e415414"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/45_triplet.jpg",
+      "bytes": 117615,
+      "sha256": "39adb0cbdc360cede7f4e06dec6142821650e2bfd0b921a7d43b560692a02fc6"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/268_triplet.jpg",
+      "bytes": 140748,
+      "sha256": "aba4982695438e3ea6d10c3c971b810474a68f7289d3da5b1ff5f2b666695d1d"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/181_triplet.jpg",
+      "bytes": 118291,
+      "sha256": "b84508130ace6778e5905d74e8afba279d61ef1c67b929f6e16192adc59e6238"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/191_triplet.jpg",
+      "bytes": 113048,
+      "sha256": "c310bf3c40c2bc78042df965c2f0f1428cebcc44b863e295410c775f4c3d83a7"
+    },
+    {
+      "path": "reports/hand_display_comparison/assets/94_triplet.jpg",
+      "bytes": 121477,
+      "sha256": "e6f609c7d41fbe9c46af3e670093dfebd8af478704c4b016c44f2d9cff07ef3a"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_wide.mp4",
+      "bytes": 15173728,
+      "sha256": "161f82111e5dc93c60561fe44d12f0467da1a89251d63d95fbc222885eb2e370"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_wide.mp4",
+      "bytes": 15189132,
+      "sha256": "d4e0d473e3faf050926af4d85ccc862e9d3fb2611aa75d1e7745246196e0b6cd"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_tight.mp4",
+      "bytes": 15104272,
+      "sha256": "b179817670efcdd7c4a4a5d4c68ae575da3f91395958368234e5766862d6ef83"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_wide.mp4",
+      "bytes": 13252155,
+      "sha256": "c5269710ef20a482bcf30f6f3c51178edfe16f6041152b9afa6941b6c92feba8"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_tight.mp4",
+      "bytes": 13256206,
+      "sha256": "19cf7b3ebce9eb4c0f8a149a6a0d61c946fa3ecb2189e40c61617532333e6bb6"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_tight.mp4",
+      "bytes": 15095747,
+      "sha256": "dee90a04b37f78419e02ebe5e425db91acc089f75df1e64270078f7f946f5dac"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_tight.mp4",
+      "bytes": 13253110,
+      "sha256": "9066b46cce64bcd3c0bf3ad691f2dacbf87e7ece9a2c91171f98267f8604c6e3"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_wide.mp4",
+      "bytes": 13313001,
+      "sha256": "eb64c7ff49f7e365c512362f4ddd74d3d2a57c2769b82ce13d6b7fb6de796219"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_wide_f264.jpg",
+      "bytes": 464622,
+      "sha256": "e80e001d835ded3c1d27def31ad554be2b7bc07f968aafbc69770e4f96ae4b4e"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_wide_f258.jpg",
+      "bytes": 475620,
+      "sha256": "6590e6bb9253d2fea734411cfd95f933cb46aed7fc7615467d6b1423243c75d1"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_wide_f396.jpg",
+      "bytes": 497119,
+      "sha256": "ef8c556a38a9b024a0e88ee737931ef7c013b31b8a93c34e88a9d0e825807f18"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_tight_f264.jpg",
+      "bytes": 464530,
+      "sha256": "cbe96c8ddc7dc8be908e17bfd385fb0539d3fb18cb6771d251a4c6c9d6663591"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_tight_f264.jpg",
+      "bytes": 464460,
+      "sha256": "2719c984f7161be78e173c42e1ab70cd772f86bc12cd106776f7504c812cf17e"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_wide_f258.jpg",
+      "bytes": 472633,
+      "sha256": "96385d3b4a3dabd629d2544804532b0be4cf4b0006f3ffb156db6eeb9128d229"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_tight_f390.jpg",
+      "bytes": 476612,
+      "sha256": "dd01acdf034efb4fbe825dae3a64dee15855a3fced00d97fe68d15ff2dfdf704"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_tight_f396.jpg",
+      "bytes": 496178,
+      "sha256": "b7312b6daa923d508b87753e8c6cda7fad5a854183330c1789cf646e84c975e4"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_wide_f390.jpg",
+      "bytes": 475521,
+      "sha256": "2e55b9ca01a557c5b51ee43a31c911d141c8e57b8165d4968e2ee1b1ddc78847"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_tight_f258.jpg",
+      "bytes": 476572,
+      "sha256": "bcf1e1dd15e7d0b595bcdc5b90623db5a237a8a9cb58fd4bc113ab2ae46a70ee"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_reference_wide_f390.jpg",
+      "bytes": 475220,
+      "sha256": "acd91b6be93d6c22fcb708164dc063a1bde07adcadd8bdc15bd9b484948e0183"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_tight_f258.jpg",
+      "bytes": 474832,
+      "sha256": "ee0375faa97c2bcbbe9e9b7be40d07ec49100cc7a8a28039624a644f4b7d24c7"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_019_detector_tight_f390.jpg",
+      "bytes": 476480,
+      "sha256": "7da1a454c727ffc588c04f832cc42a32f33003a983db839f7e3ff587dc90e909"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_wide_f264.jpg",
+      "bytes": 466024,
+      "sha256": "9565956149d33f18d31c873e6fcf25119d1d9d03015b0cc7ce1a9964ab9ba534"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_reference_wide_f396.jpg",
+      "bytes": 498054,
+      "sha256": "20ebe3eb484ffef90b93c1c0826f25b41f042d45d297ce5a090d004a36ac1569"
+    },
+    {
+      "path": "evaluation/hand_display_crop_diagnosis/session_036_detector_tight_f396.jpg",
+      "bytes": 497475,
+      "sha256": "99e4ade961436a7163991761a398baa30b9d2c3cdef3d5f644ebfe0ac793c06c"
+    }
+  ],
+  "removed_bytes": 128649622,
+  "preserved_checkpoints": {
+    "evaluation/hand_display_finetune/smoke/best.ckpt": {
+      "size": 2564954907,
+      "mtime_ns": 1792126066241290415
+    },
+    "evaluation/hand_display_finetune/full/best.ckpt": {
+      "size": 2564954907,
+      "mtime_ns": 1792126700211085630
+    }
+  },
+  "preserved": "raw/training data, code, metrics, prediction arrays, current unified videos, worst report, other experiments"
+}

@@ -1,0 +1,106 @@
+{
+  "retained_ppts": [
+    "reports/training_overview/WiLoR_训练总汇报.pptx",
+    "reports/hand_display_comparison/WiLoR_手套微调_汇报.pptx"
+  ],
+  "source_content_archive": "source_deck_content.json",
+  "removed": [
+    {
+      "path": "reports/wilor_training_reproduction_summary/WiLoR_论文代码差异与本机训练复盘_更新前备份.pptx",
+      "bytes": 124438,
+      "sha256": "f807d34ad1d682b23e1e5d2fb6a20d7a1e832ef6c259de8b26c345fbb234cdbf"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/WiLoR_论文代码差异与本机训练复盘.pptx",
+      "bytes": 1129481,
+      "sha256": "7103100f9a426e9e01fe0176740f0886d48c57fa5e9d3bfb3f2c4ccde1049bbf"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/WiLoR_论文代码差异与本机训练复盘_selftrain对比更新前备份.pptx",
+      "bytes": 143826,
+      "sha256": "10a5a1e49bcfd7d4577ffaf36e9dbde27f4572d264d292f9abd2ee018ce02fc0"
+    },
+    {
+      "path": "reports/wilor_experiment_review_corrected/WiLoR_experiments_and_scale_diagnosis.pptx",
+      "bytes": 452241,
+      "sha256": "89390f1a00c2cad879c6b4348e05da052afc60fddacb446f8f6228ef77e454bf"
+    },
+    {
+      "path": "reports/wilor_three_model_review/WiLoR_三模型对比与Gaussian微调计划.pptx",
+      "bytes": 8695294,
+      "sha256": "8e833f7ecbd0a439707a01ec67c593165927421c4136af5a559e2de607524afc"
+    },
+    {
+      "path": "reports/wilor_experiment_review/WiLoR_experiments_and_scale_diagnosis.pptx",
+      "bytes": 452241,
+      "sha256": "89390f1a00c2cad879c6b4348e05da052afc60fddacb446f8f6228ef77e454bf"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/preview_slide_13.png",
+      "bytes": 184324,
+      "sha256": "0ca3dbf8d50941f251012b6f4548a6ee8a33c0aa6dfafa780abb76175e045288"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/preview_slide_04.png",
+      "bytes": 121401,
+      "sha256": "0a53a0da02b74e400dca087d82162b28d395f79de4e9b3a725cb9ef0d26be499"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/preview_slide_21.png",
+      "bytes": 77156,
+      "sha256": "10d92621fe04128a221cffcd42788ea966c9e2e00a9a3a165df57ad576123e0a"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/preview_slide_15.png",
+      "bytes": 134819,
+      "sha256": "50735673e85a47f1d29f41a6274983a625149f38404f32649863edcb6f709ea3"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/preview_slide_16.png",
+      "bytes": 133655,
+      "sha256": "037b6213a472fe312e7fdc4fcfa531abc148ea23ec48381ab6d8f79224c1bffe"
+    },
+    {
+      "path": "reports/wilor_training_reproduction_summary/overview.png",
+      "bytes": 847610,
+      "sha256": "b6a12d5b8e2e80006e62646a8a1e1dfec50339287a6444df43f9efec069d2fda"
+    },
+    {
+      "path": "reports/wilor_three_model_review/slide_02.png",
+      "bytes": 3229406,
+      "sha256": "1e80bdf18d21c33331df8c97730b219798b13322a364b7297736bae517c00235"
+    },
+    {
+      "path": "reports/wilor_three_model_review/slide_03.png",
+      "bytes": 1112248,
+      "sha256": "082218fa9c002c2069472a744da42c8b817dc1b1401718ec6ab6a0d5a247b17e"
+    },
+    {
+      "path": "reports/wilor_three_model_review/slide_04.png",
+      "bytes": 829840,
+      "sha256": "476d15618bdf172f4b41e461271de56268069f903ab3a32e58513d1b733ec984"
+    },
+    {
+      "path": "reports/wilor_three_model_review/slide_01.png",
+      "bytes": 463379,
+      "sha256": "110872d95396f864400214190de525a95206b1a8ea9bc4c3226c8f3f6e69afe3"
+    },
+    {
+      "path": "reports/wilor_three_model_review/overview.png",
+      "bytes": 855415,
+      "sha256": "be8996794250f155a149ae799fb7013d4c9b670e11f5d3e82f8bd487c1d7ecd4"
+    },
+    {
+      "path": "reports/wilor_three_model_review/WiLoR_三模型对比与Gaussian微调计划.pdf",
+      "bytes": 4011239,
+      "sha256": "5e07774a69d5b631b774dfba7e2e5b28ae6f4e74a1ac663d84a69c4326d80832"
+    },
+    {
+      "path": "reports/wilor_three_model_review/WiLoR_高清对照图与评测记录.zip",
+      "bytes": 9620306,
+      "sha256": "53a41677eb50db01efc2cdc6436c3dde0c0c4b71ea0493c995f07d41e6202200"
+    }
+  ],
+  "freed_bytes": 32618319,
+  "preserved": "All checkpoints, training logs, metrics, dataset files, scripts, underlying comparison images; no training process changes"
+}

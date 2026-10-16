@@ -1,0 +1,17 @@
+{
+  "slides_updated": [
+    4,
+    5,
+    6,
+    7
+  ],
+  "rows": [
+    "Raw image",
+    "Dataset annotation",
+    "Official WiLoR",
+    "Fine-tuned WiLoR"
+  ],
+  "reference": "Source MANO-derived 21 joints, projected with dataset camera intrinsics; from validated val.npz",
+  "same_samples_and_crop": true,
+  "slides": 8
+}

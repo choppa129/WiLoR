@@ -1,0 +1,9 @@
+{
+  "slides": 8,
+  "setup_slide": 1,
+  "curves_slide": 3,
+  "based_on_remote_commit": "130602e",
+  "preserved_original_slides": 6,
+  "training_accuracy": "not a classification task; training pose error only has before/best evaluations",
+  "source": "evaluation/hand_display_finetune/full/history.json"
+}
